@@ -1,0 +1,15 @@
+<use name=FWCore/Framework>
+<use name=FWCore/PluginManager>
+<use name=RecoEcal/EgammaCoreTools>
+<use name=AnalysisDataFormats/Egamma>
+<use name=EgammaAnalysis/PhotonIDAlgos>
+<flags EDM_PLUGIN=1>
+<export>
+  <lib name=EgammaAnalysisPhotonIDProducers>
+  <use name=FWCore/Framework>
+  <use name=RecoEcal/EgammaCoreTools>
+  <use name=AnalysisDataFormats/Egamma>
+  <use name=EgammaAnalysis/PhotonIDAlgos>
+
+</export>
+

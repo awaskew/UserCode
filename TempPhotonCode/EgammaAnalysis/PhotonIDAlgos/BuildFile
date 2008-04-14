@@ -1,0 +1,25 @@
+<use name=FWCore/Framework>
+<use name=DataFormats/HcalRecHit>
+<use name=DataFormats/EgammaReco>
+<use name=AnalysisDataFormats/Egamma>
+<use name=CondFormats/PhysicsToolsObjects>
+<use name=CondFormats/EgammaObjects>
+<use name=CondFormats/DataRecord>
+<use name=Geometry/CaloGeometry>
+<use name=RecoCaloTools/MetaCollections>
+<use name=RecoEgamma/EgammaPhotonAlgos>
+<export>
+  <use name=AnalysisDataFormats/Egamma>
+  <lib name=EgammaAnalysisPhotonIDAlgos>
+  <use name=FWCore/Framework>
+  <use name=DataFormats/HcalRecHit>
+  <use name=DataFormats/EgammaReco>
+  <use name=CondFormats/PhysicsToolsObjects>
+  <use name=CondFormats/EgammaObjects>
+  <use name=CondFormats/DataRecord>
+  <use name=Geometry/CaloGeometry>
+  <use name=RecoCaloTools/MetaCollections>
+  <use name=RecoEgamma/EgammaPhotonAlgos>
+</export>
+
+
