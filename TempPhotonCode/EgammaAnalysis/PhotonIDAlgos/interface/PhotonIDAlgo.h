@@ -39,22 +39,24 @@ public:
 				  double RCone=0.4,
 				  double RConeInner=0,
 				  double etMin=0);
+  bool isAlsoElectron(const reco::Photon* photon,
+		      const edm::Event& e);
 
   
  private:
 
-  double photonBasicClusterConeRadius_;
-  double trackConeOuterRadius_;
-  double trackConeInnerRadius_;
-  std::string barrelSuperClusterProducer_;
+
   std::string endcapSuperClusterProducer_;      
-  std::string barrelhybridsuperclusterCollection_;
   std::string endcapsuperclusterCollection_;
+  std::string barrelislandsuperclusterCollection_;
+  std::string barrelislandsuperclusterProducer_;
   std::string barrelbasicclusterCollection_;
   std::string barrelbasicclusterProducer_;
   std::string endcapbasicclusterCollection_;
   std::string endcapbasicclusterProducer_;
   edm::InputTag trackInputTag_;
+  edm::InputTag gsfRecoInputTag_;
+
 
   };
 

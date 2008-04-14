@@ -25,7 +25,14 @@ public:
   double photonSolidConeTrkIsolationCut_;
   bool photonCutElectronDupes_;
   bool photonCutNonFiducialClus_;
-  
+
+  //Isolation parameters
+  double photonBasicClusterConeOuterRadius_;
+  double photonBasicClusterConeInnerRadius_;
+  double isolationbasicclusterThreshold_;
+  double trackConeOuterRadius_;
+  double trackConeInnerRadius_;
+  double isolationtrackThreshold_;
 };
 
 #endif // PTDRElectronID_H

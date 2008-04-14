@@ -3,25 +3,30 @@
 #include "DataFormats/EgammaReco/interface/SuperCluster.h"
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
+#include "DataFormats/EgammaCandidates/interface/GsfElectron.h"
+#include "DataFormats/EgammaCandidates/interface/GsfElectronFwd.h"
 #include <string>
 #include <TMath.h>
 
 void PhotonIDAlgo::baseSetup(const edm::ParameterSet& conf) {
-  //Need to get track collection, super cluster and basic cluster collection here.
-  //Also cone Radii for tracks and bc
-  photonBasicClusterConeRadius_ = conf.getParameter<double>("BasicClusterConeRadius");
-  trackConeOuterRadius_ = conf.getParameter<double>("TrackConeOuterRadius");
-  trackConeInnerRadius_ = conf.getParameter<double>("TrackConeInnerRadius");
+
+
   trackInputTag_ = conf.getParameter<edm::InputTag>("trackProducer");
-  barrelSuperClusterProducer_ = conf.getParameter<std::string>("barrelSuperClusterProducer");
+
+  barrelislandsuperclusterCollection_ = conf.getParameter<std::string>("barrelislandsuperclusterCollection");
+  barrelislandsuperclusterProducer_ = conf.getParameter<std::string>("barrelislandsuperclusterCollection");
+
   endcapSuperClusterProducer_ = conf.getParameter<std::string>("endcapSuperClustersProducer");      
-  barrelhybridsuperclusterCollection_ = conf.getParameter<std::string>("barrelhybridsuperclusterCollection");
   endcapsuperclusterCollection_ = conf.getParameter<std::string>("endcapsuperclusterCollection");
+
   barrelbasicclusterCollection_ = conf.getParameter<std::string>("barrelbasiccluterCollection");
   barrelbasicclusterProducer_ = conf.getParameter<std::string>("barrelbasicclusterProducer");
   endcapbasicclusterCollection_ = conf.getParameter<std::string>("endcapbasicclusterCollection");
   endcapbasicclusterProducer_ = conf.getParameter<std::string>("endcapbasicclusterProducer");
   
+  gsfRecoInputTag_ = conf.getParameter<edm::InputTag>("GsfRecoCollection");
+
+
 }
 
 
@@ -33,21 +38,29 @@ void PhotonIDAlgo::classify(const reco::Photon* photon,
 			    bool &isEEGap,
 			    bool &isEBEEGap){
 
-  
+  //Set fiducial flags for this photon.
   double eta = photon->p4().Eta();
   double phi = photon->p4().Phi();
   double feta = fabs(eta);
+
+  //Are you in the EE?
   if(feta>1.479) 
     isEEPho = true;
   else 
     isEBPho = true;
+
+  //Are you in the gap between EE and EB?
   if (fabs(feta-1.479)<.1) isEBEEGap=true; 
   
   
   //fiducial cuts, currently only for EB, since I don't know
   //EE yet.
+
+  //Module boundaries in phi (supermodule boundaries):
   float phigap = fabs(phi-int(phi*9/3.1416)*3.1416/9.);
   if(phigap > 1.65 && phigap <1.85) isEBGap=true;
+
+  //Module boundaries in eta (supercrystal boundaries):
   if(fabs(eta)<.05) isEBGap=true;
   if(fabs(eta)>.4 && fabs(eta)<.5) isEBGap=true;
   if(fabs(eta)>.75 && fabs(eta)<.85) isEBGap=true;
@@ -68,6 +81,9 @@ void PhotonIDAlgo::calculateTrackIso(const reco::Photon* photon,
   //RecoEgamma/EgammaIsolationAlgos/src/ElectronTkIsolation.
   //and hacked it to my own purposes.  Therefore, consider mistakes mine (AA).
   
+  //Take what hopefully is the generic track collection.  Take a cone about the supercluster
+  //at DCA, and sum up tracks which have dR > RinnerCone and dR < RCone.  Keep count of how many tracks
+  //as well.
   int counter  =0;
   double ptSum =0.;
   
@@ -98,7 +114,7 @@ void PhotonIDAlgo::calculateTrackIso(const reco::Photon* photon,
     if (dphi > TMath::Pi()) dphi = TMath::Pi()*2 - dphi;
     double dphi2 = dphi*dphi;
     double dr = sqrt(deta2 + dphi2);
-    if ( dr < RCone && dr > RinnerCone ){
+    if ( dr < RCone && dr > RinnerCone){
       ++counter;
       ptSum += this_pt;
     }//In cone? 
@@ -115,38 +131,45 @@ double PhotonIDAlgo::calculateBasicClusterIso(const reco::Photon* photon,
 					    double RConeInner,
 					    double etMin){
   //This is not my code, I stole this almost entirely from 
-  //RecoEgamma/EgammaIsolationAlgos/src/EgammaEcalIsolation.cc
+  //RecoEgamma/EgammaIsolationAlgos/src/EgammaEcalIsolation.
   //Any mistakes in adaptation for here are mine (AA).
 
-  //Need to change this to make appropriate to EB-EE
-  edm::Handle<reco::SuperClusterCollection> superClusterH;
+  //This gets a little convoluted:
+  //Calculate the isolation for a hybrid supercluster.  The issue is that
+  //we're going to calculate isolation using island basic clusters.
+
   edm::Handle<reco::BasicClusterCollection> basicClusterH;
+  edm::Handle<reco::SuperClusterCollection> superIslandClusterH;
 
   double peta = photon->p4().Eta();
   if (fabs(peta) > 1.479){
-    iEvent.getByLabel(endcapSuperClusterProducer_,endcapsuperclusterCollection_,superClusterH);
     iEvent.getByLabel(endcapbasicclusterProducer_,endcapbasicclusterCollection_,basicClusterH);
+    iEvent.getByLabel(endcapSuperClusterProducer_,endcapsuperclusterCollection_,superIslandClusterH);
   }
   else{
-    iEvent.getByLabel(barrelSuperClusterProducer_,barrelhybridsuperclusterCollection_,superClusterH);
     iEvent.getByLabel(barrelbasicclusterProducer_,barrelbasicclusterCollection_,basicClusterH);
+    iEvent.getByLabel(barrelislandsuperclusterProducer_,barrelislandsuperclusterCollection_,superIslandClusterH);
   }
-  const reco::SuperClusterCollection* superClusterCollection_ = superClusterH.product();
   const reco::BasicClusterCollection* basicClusterCollection_ = basicClusterH.product();
-
+  const reco::SuperClusterCollection* islandSuperClusterCollection_ = superIslandClusterH.product();
 
   double ecalIsol=0.;
+  //Get MY supercluster position
   reco::SuperClusterRef sc = photon->superCluster();
   math::XYZVector position(sc.get()->position().x(),
 			   sc.get()->position().y(),
 			   sc.get()->position().z());
   
   // match the photon hybrid supercluster with those with Algo==0 (island)
+  //Since this code doesn't use the merged collections, the Algo checking doesn't do anything.  I've
+  //left it here since it is harmless:  all clusters should pass requirement, since I specifically got
+  //those collections. ---A. A.
+
   double delta1=1000.;
   const reco::SuperCluster *matchedsupercluster=0;
   bool MATCHEDSC = false;
   
-  for(reco::SuperClusterCollection::const_iterator scItr = superClusterCollection_->begin(); scItr != superClusterCollection_->end(); ++scItr){
+  for(reco::SuperClusterCollection::const_iterator scItr = islandSuperClusterCollection_->begin(); scItr != islandSuperClusterCollection_->end(); ++scItr){
      
     const reco::SuperCluster *supercluster = &(*scItr);
     
@@ -173,6 +196,8 @@ double PhotonIDAlgo::calculateBasicClusterIso(const reco::Photon* photon,
     }
   }
  
+
+  //Okay, now I've made the association between my HybridSupercluster and an IslandSuperCluster.
   const reco::BasicCluster *cluster= 0;
   
   //loop over basic clusters
@@ -195,6 +220,11 @@ double PhotonIDAlgo::calculateBasicClusterIso(const reco::Photon* photon,
 	  
 	  reco::basicCluster_iterator theEclust = matchedsupercluster->clustersBegin();
 	  // loop over the basic clusters of the matched supercluster
+
+	  //I consider this somewhat wacky, if you are a basiccluster which was included in my
+	  //matched island supercluster, then you don't count against me for isolation.  If you AREN'T
+	  //included in my supercluster, then you are assumed to be from something else.  I think this
+	  //will have to be eliminated, especially if we're going to use fixed arrays for photons.
 	  for(;theEclust != matchedsupercluster->clustersEnd();
 	      theEclust++) {
 	    if ((**theEclust) ==  (*cluster) ) inSuperCluster = true;
@@ -228,4 +258,42 @@ double PhotonIDAlgo::calculateBasicClusterIso(const reco::Photon* photon,
   return ecalIsol;
   
 
+}
+
+bool PhotonIDAlgo::isAlsoElectron(const reco::Photon* photon,
+				  const edm::Event& e){
+
+  //Get MY supercluster position
+  reco::SuperClusterRef sc = photon->superCluster();
+  math::XYZVector position(sc.get()->position().x(),
+			   sc.get()->position().y(),
+			   sc.get()->position().z());
+
+  //get the Gsf electrons:
+  edm::Handle<reco::PixelMatchGsfElectronCollection> pElectrons;
+  e.getByLabel(gsfRecoInputTag_, pElectrons);
+  const reco::PixelMatchGsfElectronCollection *elec = pElectrons.product();
+  for(reco::PixelMatchGsfElectronCollection::const_iterator gItr = elec->begin(); gItr != elec->end(); ++gItr){
+    reco::SuperClusterRef *clussy = &(*gItr).superCluster();
+    const reco::SuperCluster* supercluster = clussy->get(); 
+    
+    math::XYZVector currentPosition(supercluster->position().x(),
+				    supercluster->position().y(),
+				    supercluster->position().z());
+    
+    double trEta = currentPosition.eta();
+    double trPhi = currentPosition.phi();
+    double peta = position.eta();
+    double pphi = position.phi();
+    double deta2 = (trEta-peta)*(trEta-peta);
+    double dphi = fabs(trPhi-pphi);
+    if (dphi > TMath::Pi()) dphi = TMath::Pi()*2 - dphi;
+    double dphi2 = dphi*dphi;
+    double dr = sqrt(deta2 + dphi2);
+    if (dr < 0.0001) {
+      return true;
+    }
+  }    
+    
+  return false;
 }
