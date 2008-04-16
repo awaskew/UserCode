@@ -14,12 +14,12 @@ void CutBasedPhotonIDAlgo::setup(const edm::ParameterSet& conf) {
   photonSolidConeTrkIsolationCut_ = conf.getParameter<double>("PhotonSolidTrk");
   photonSolidConeNTrkCut_ = conf.getParameter<int>("PhotonSolidNTrk");
   photonHollowConeNTrkCut_ = conf.getParameter<int>("PhotonHollowNTrk");
-
+  photonEtaWidthCut_ = conf.getParameter<double>("PhotonEtaWidth");
+  photonHadOverEMCut_ = conf.getParameter<double>("PhotonHadOverEM");
 
   photonBasicClusterConeOuterRadius_ = conf.getParameter<double>("BasicClusterConeOuterRadius");
   photonBasicClusterConeInnerRadius_ = conf.getParameter<double>("BasicClusterConeInnerRadius");
   isolationbasicclusterThreshold_ = conf.getParameter<double>("isolationbasicclusterThreshold");
-
   trackConeOuterRadius_ = conf.getParameter<double>("TrackConeOuterRadius");
   trackConeInnerRadius_ = conf.getParameter<double>("TrackConeInnerRadius");
   isolationtrackThreshold_ = conf.getParameter<double>("isolationtrackThreshold");
@@ -30,6 +30,8 @@ void CutBasedPhotonIDAlgo::setup(const edm::ParameterSet& conf) {
   dophotonSCTrkIsolationCut_ = conf.getParameter<bool>("DoSolidConeTrackIsolationCut");
   dophotonHCNTrkCut_ = conf.getParameter<bool>("DoHollowConeNTrkCut");
   dophotonSCNTrkCut_ = conf.getParameter<bool>("DoSolidConeNTrkCut");
+  dophotonHadOverEMCut_ = conf.getParameter<bool>("DoHadOverEMCut");
+  dophotonsigmaeeCut_ = conf.getParameter<bool>("DoEtaWidthCut");
   dorequireNotElectron_ = conf.getParameter<bool>("RequireNotElectron");
   dorequireFiducial_ = conf.getParameter<bool>("RequireFiducial");
 }
@@ -74,12 +76,12 @@ reco::PhotonID CutBasedPhotonIDAlgo::calculate(const reco::Photon* pho, const ed
 		      trkiso, sntrk, ntrk,
 		      isEBPho, isEEPho, isEBGap, isEEGap, isEBEEGap,
 		      isElec);
-  
-  decide(temp);
+
+  decide(temp, pho);
   return temp;
 
 }
-void CutBasedPhotonIDAlgo::decide(reco::PhotonID &phID){
+void CutBasedPhotonIDAlgo::decide(reco::PhotonID &phID, const reco::Photon* pho){
 
   //Require that this is not also an Electron supercluster
   if (dorequireNotElectron_){
@@ -143,6 +145,30 @@ void CutBasedPhotonIDAlgo::decide(reco::PhotonID &phID){
       phID.setDecision(false);
       return;
     }  
+  }
+
+  //HadoverEM cut
+  if (dophotonHadOverEMCut_){
+    float hadoverE = pho->hadronicOverEm();
+    if (hadoverE > photonHadOverEMCut_){
+      phID.setDecision(false);
+      return;
+    }
+  }
+
+  //eta width
+
+  if (dophotonsigmaeeCut_){
+    reco::SuperClusterRef sc = pho->superCluster();
+    
+    double sigmaee = sc->etaWidth();
+    if (phID.isEEPho()){
+      sigmaee = sigmaee - 0.02*(fabs(sc->position().eta()) - 2.3);   //correct sigmaetaeta dependence on eta in endcap
+    }
+    if (sigmaee > photonEtaWidthCut_){
+      phID.setDecision(false);
+      return;
+    }
   }
 
   //if you got here, you must have passed all cuts!

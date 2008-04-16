@@ -17,7 +17,7 @@ public:
 
   void setup(const edm::ParameterSet& conf);
   reco::PhotonID calculate(const reco::Photon*, const edm::Event&);
-  void decide(reco::PhotonID &phID);
+  void decide(reco::PhotonID &phID, const reco::Photon* pho);
  private:
   
   //Which cuts to do?
@@ -28,6 +28,8 @@ public:
   bool dophotonSCNTrkCut_;
   bool dorequireNotElectron_;
   bool dorequireFiducial_;
+  bool dophotonHadOverEMCut_;
+  bool dophotonsigmaeeCut_;
 
   //Actual cut values
   double photonBasicClusterIsolationCut_;
@@ -35,6 +37,9 @@ public:
   double photonSolidConeTrkIsolationCut_;
   int photonSolidConeNTrkCut_;
   int photonHollowConeNTrkCut_;
+  double photonEtaWidthCut_;
+  double photonHadOverEMCut_;
+
 
   //Isolation parameters
   double photonBasicClusterConeOuterRadius_;
