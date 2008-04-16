@@ -22,14 +22,14 @@ class PhotonID
   bool cutBasedDecision() const {return cutBasedDecision_;}
   //Returns computed BasicCluster isolation
   double isolationECal() const{return isolationECal_;}
-  //Returns calculated sum track pT cone of dR = 0.4
-  double isolationSolidTrkCone4() const{return isolationSolidTrkCone4_;}
-  //As above, excluding the 0.1 at the center of the cone
-  double isolationHollow1TrkCone4() const{return isolationHollow1TrkCone4_;}
-  //Returns number of tracks in a cone of dR=0.4
-  int nTrkSolidCone4() const{return nTrkSolidCone4_;}
-  //As above, excluding the 0.1 at the center of the cone
-  int nTrkHollow1Cone4() const{return nTrkHollow1TrkCone4_;}
+  //Returns calculated sum track pT cone of dR
+  double isolationSolidTrkCone() const{return isolationSolidTrkCone_;}
+  //As above, excluding the core at the center of the cone
+  double isolationHollowTrkCone() const{return isolationHollowTrkCone_;}
+  //Returns number of tracks in a cone of dR
+  int nTrkSolidCone() const{return nTrkSolidCone_;}
+  //As above, excluding the core at the center of the cone
+  int nTrkHollowCone() const{return nTrkHollowTrkCone_;}
 
   //if photon is in ECAL barrel
   bool isEBPho() const{return isEBPho_;}
@@ -58,13 +58,13 @@ class PhotonID
   //BasicCluster Isolation
   double isolationECal_;
   //Sum of track pT in a cone of dR=0.4
-  double isolationSolidTrkCone4_;
+  double isolationSolidTrkCone_;
   //Sum of track pT in a hollow cone of outer radius 0.4, inner radius 0.1
-  double isolationHollow1TrkCone4_;
+  double isolationHollowTrkCone_;
   //Number of tracks in a cone of dR=0.4
-  int nTrkSolidCone4_;
+  int nTrkSolidCone_;
   //Number of tracks in a hollow cone of outer radius 0.4, inner radius 0.1
-  int nTrkHollow1TrkCone4_;
+  int nTrkHollowTrkCone_;
  
   //Fiducial flags
   bool isEBPho_;//Photon is in EB

@@ -17,14 +17,24 @@ public:
 
   void setup(const edm::ParameterSet& conf);
   reco::PhotonID calculate(const reco::Photon*, const edm::Event&);
-  void decide(const reco::Photon* photon,
-	      const edm::Event& e, reco::PhotonID phID);
+  void decide(reco::PhotonID &phID);
  private:
+  
+  //Which cuts to do?
+  bool dophotonBCIsolationCut_;
+  bool dophotonHCTrkIsolationCut_;
+  bool dophotonSCTrkIsolationCut_;
+  bool dophotonHCNTrkCut_;
+  bool dophotonSCNTrkCut_;
+  bool dorequireNotElectron_;
+  bool dorequireFiducial_;
+
+  //Actual cut values
   double photonBasicClusterIsolationCut_;
   double photonHollowConeTrkIsolationCut_;
   double photonSolidConeTrkIsolationCut_;
-  bool photonCutElectronDupes_;
-  bool photonCutNonFiducialClus_;
+  int photonSolidConeNTrkCut_;
+  int photonHollowConeNTrkCut_;
 
   //Isolation parameters
   double photonBasicClusterConeOuterRadius_;

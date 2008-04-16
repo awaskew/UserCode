@@ -7,13 +7,15 @@ void CutBasedPhotonIDAlgo::setup(const edm::ParameterSet& conf) {
   
   // Get all the parameters
   baseSetup(conf);
-  
+
   //get cuts here
   photonBasicClusterIsolationCut_ = conf.getParameter<double>("PhotonBCIso");
   photonHollowConeTrkIsolationCut_ = conf.getParameter<double>("PhotonHollowTrk");
   photonSolidConeTrkIsolationCut_ = conf.getParameter<double>("PhotonSolidTrk");
-  photonCutElectronDupes_ = conf.getParameter<bool>("DiscardAlsoElectrons");
-  photonCutNonFiducialClus_ = conf.getParameter<bool>("RequireFiducial");
+  photonSolidConeNTrkCut_ = conf.getParameter<int>("PhotonSolidNTrk");
+  photonHollowConeNTrkCut_ = conf.getParameter<int>("PhotonHollowNTrk");
+
+
   photonBasicClusterConeOuterRadius_ = conf.getParameter<double>("BasicClusterConeOuterRadius");
   photonBasicClusterConeInnerRadius_ = conf.getParameter<double>("BasicClusterConeInnerRadius");
   isolationbasicclusterThreshold_ = conf.getParameter<double>("isolationbasicclusterThreshold");
@@ -21,7 +23,15 @@ void CutBasedPhotonIDAlgo::setup(const edm::ParameterSet& conf) {
   trackConeOuterRadius_ = conf.getParameter<double>("TrackConeOuterRadius");
   trackConeInnerRadius_ = conf.getParameter<double>("TrackConeInnerRadius");
   isolationtrackThreshold_ = conf.getParameter<double>("isolationtrackThreshold");
-  
+
+  //Decision cuts
+  dophotonBCIsolationCut_ = conf.getParameter<bool>("DoBasicClusterIsolationCut");
+  dophotonHCTrkIsolationCut_ = conf.getParameter<bool>("DoHollowConeTrackIsolationCut");
+  dophotonSCTrkIsolationCut_ = conf.getParameter<bool>("DoSolidConeTrackIsolationCut");
+  dophotonHCNTrkCut_ = conf.getParameter<bool>("DoHollowConeNTrkCut");
+  dophotonSCNTrkCut_ = conf.getParameter<bool>("DoSolidConeNTrkCut");
+  dorequireNotElectron_ = conf.getParameter<bool>("RequireNotElectron");
+  dorequireFiducial_ = conf.getParameter<bool>("RequireFiducial");
 }
 
 reco::PhotonID CutBasedPhotonIDAlgo::calculate(const reco::Photon* pho, const edm::Event& e){
@@ -64,7 +74,79 @@ reco::PhotonID CutBasedPhotonIDAlgo::calculate(const reco::Photon* pho, const ed
 		      trkiso, sntrk, ntrk,
 		      isEBPho, isEEPho, isEBGap, isEEGap, isEBEEGap,
 		      isElec);
-
+  
+  decide(temp);
   return temp;
+
+}
+void CutBasedPhotonIDAlgo::decide(reco::PhotonID &phID){
+
+  //Require that this is not also an Electron supercluster
+  if (dorequireNotElectron_){
+    if (phID.isAlsoElectron()){
+      phID.setDecision(false);
+      return;
+    }
+  }
+  
+  //Require supercluster is within fiducial volume.
+  if(dorequireFiducial_){
+    if (phID.isEBEEGap()) {
+      phID.setDecision(false);
+      return;
+    }
+    if (phID.isEBPho() && phID.isEBGap()){ 
+      phID.setDecision(false);
+      return;
+    }
+    if (phID.isEEPho() && phID.isEEGap()){
+      phID.setDecision(false);
+      return;
+    }
+  }
+  
+  //Cut on the sum of basic clusters within a cone
+  if(dophotonBCIsolationCut_){
+    if (phID.isolationHollowTrkCone() > photonBasicClusterIsolationCut_){
+      phID.setDecision(false);
+      return;
+    }
+  }
+
+  //Cut on number of tracks within the solid cone.
+  if (dophotonSCNTrkCut_){
+    if (phID.nTrkSolidCone() > photonSolidConeNTrkCut_){
+      phID.setDecision(false);
+      return;
+    }
+  }
+
+  //Cut on number of tracks within the hollow cone.
+  if (dophotonHCNTrkCut_){
+    if (phID.nTrkHollowCone() > photonHollowConeNTrkCut_){
+      phID.setDecision(false);
+      return;
+    }
+  }
+  
+  //Cut on the sum of tracks within a solid cone
+  if (dophotonSCTrkIsolationCut_){
+    if (phID.isolationSolidTrkCone() > photonSolidConeTrkIsolationCut_){
+      phID.setDecision(false);
+      return;
+    }
+  }
+
+  //Cut on the sum of tracks within a hollow cone
+  if (dophotonHCTrkIsolationCut_){
+    if (phID.isolationHollowTrkCone() > photonHollowConeTrkIsolationCut_){
+      phID.setDecision(false);
+      return;
+    }  
+  }
+
+  //if you got here, you must have passed all cuts!
+  phID.setDecision(true);
+  
 
 }

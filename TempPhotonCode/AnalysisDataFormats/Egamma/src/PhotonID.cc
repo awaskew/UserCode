@@ -6,10 +6,10 @@ using namespace reco;
 PhotonID::PhotonID(){
   cutBasedDecision_=false;
   isolationECal_=999;
-  isolationSolidTrkCone4_=999;
-  isolationHollow1TrkCone4_=999;
-  nTrkSolidCone4_=999;
-  nTrkHollow1TrkCone4_=999;
+  isolationSolidTrkCone_=999;
+  isolationHollowTrkCone_=999;
+  nTrkSolidCone_=999;
+  nTrkHollowTrkCone_=999;
   isEBPho_=false;
   isEEPho_=false;
   isEBGap_=false;
@@ -20,9 +20,10 @@ PhotonID::PhotonID(){
 
 PhotonID::PhotonID(bool Decision, 
 		   double BCIso, 
-		   double TrkCone4,
-		   double HollowCone4, 
-		   int nTrkCone4, int nHollow4,
+		   double TrkCone,
+		   double HollowCone, 
+		   int nTrkCone, 
+		   int nHollow,
 		   bool EBPho, 
 		   bool EEPho, 
 		   bool EBGap, 
@@ -31,10 +32,10 @@ PhotonID::PhotonID(bool Decision,
 		   bool isAlsoElectron){
   cutBasedDecision_=Decision;
   isolationECal_=BCIso;
-  isolationSolidTrkCone4_=TrkCone4;
-  isolationHollow1TrkCone4_=HollowCone4;
-  nTrkSolidCone4_=nTrkCone4;
-  nTrkHollow1TrkCone4_=nHollow4;
+  isolationSolidTrkCone_=TrkCone;
+  isolationHollowTrkCone_=HollowCone;
+  nTrkSolidCone_=nTrkCone;
+  nTrkHollowTrkCone_=nHollow;
   isEBPho_=EBPho;
   isEEPho_=EEPho;
   isEBGap_=EBGap;
