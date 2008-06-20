@@ -1,0 +1,22 @@
+module selectDigi = EcalDigiSelector {
+
+  string selectedEcalEBDigiCollection = "selectedEcalEBDigiCollection"
+  string selectedEcalEEDigiCollection = "selectedEcalEEDigiCollection"
+
+  string barrelSuperClusterCollection = ""
+  string barrelSuperClusterProducer = "correctedHybridSuperClusters"
+
+  string endcapSuperClusterCollection = ""
+  string endcapSuperClusterProducer = "correctedMulti5x5SuperClustersWithPreshower"
+
+  InputTag EcalEBDigiTag = ecalDigis:ebDigis
+  InputTag EcalEEDigiTag = ecalDigis:eeDigis
+  
+  InputTag EcalEBRecHitTag = ecalRecHit:EcalRecHitsEB
+  InputTag EcalEERecHitTag = ecalRecHit:EcalRecHitsEE
+
+  double cluster_pt_thresh = 20
+  int32 nclus_sel = 1
+
+
+}

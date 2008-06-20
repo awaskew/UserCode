@@ -1,0 +1,4 @@
+include "RecoEgamma/EgammaSelectDigis/data/select_digis.cfi"
+
+
+sequence seldigis = {selectDigi}

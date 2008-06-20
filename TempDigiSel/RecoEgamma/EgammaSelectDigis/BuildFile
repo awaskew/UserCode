@@ -1,8 +1,24 @@
 <use name=FWCore/Framework>
 <use name=FWCore/PluginManager>
+<use name=DataFormats/DetId>
+<use name=DataFormats/EgammaReco>
+<use name=DataFormats/EcalDigi>
+<use name=Geometry/CaloTopology>
+<use name=Geometry/CaloEventSetup>
+<use name=DataFormats/EcalDetId>
+<use name=RecoEcal/EgammaCoreTools>
+<use name=DataFormats/EcalRecHit>
 <flags EDM_PLUGIN=1>
 <export>
   <use name=FWCore/Framework>
+  <use name=DataFormats/DetId>
+  <use name=DataFormats/EgammaReco>
+  <use name=DataFormats/EcalDigi>
+  <use name=Geometry/CaloTopology>
+  <use name=Geometry/CaloEventSetup>
+  <use name=DataFormats/EcalDetId>
+  <use name=RecoEcal/EgammaCoreTools>
+  <use name=DataFormats/EcalRecHit>
   <lib name=RecoEgammaEgammaSelectDigis>
 </export>
 
