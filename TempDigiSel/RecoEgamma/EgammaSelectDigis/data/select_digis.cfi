@@ -15,7 +15,7 @@ module selectDigi = EcalDigiSelector {
   InputTag EcalEBRecHitTag = ecalRecHit:EcalRecHitsEB
   InputTag EcalEERecHitTag = ecalRecHit:EcalRecHitsEE
 
-  double cluster_pt_thresh = 20
+  double cluster_pt_thresh = 45
   int32 nclus_sel = 1
 
 
