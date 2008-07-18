@@ -132,8 +132,18 @@ from dijets(red).}
 
 \section{Efficiency Determination in the Data}
 Since photons are not redundant objects (as previously stated), the determination of the data efficiency for photon reconstruction requires more steps than the simple tag-and-probe method for electrons from $Z\rightarrow ee$ events.
+The base prescription for measuring photon efficiencies in data shall be:
+\begin{list}{$\bullet$}
+\item{Make selection on quantities that will be as similar as possible between electrons and photons.  A good example of this is the hollow cone of the track isolation, which will be set such that for electrons the associated track will be outside this
+cone such that the track isolation efficiency can be measured with electrons.}
+\item{Ascertain the extent to which a cut can be made on these similar quantities.  If a cut on, say track isolation, is noticeably different between electrons and photons in the Monte Carlo, then this difference must be assigned as a systematic uncertainty.}
+\item{Measure the efficiency for the given selection cuts in data using a tag-and-probe method.  Use this same tag-and-probe method to measure the efficiency in Monte Carlo, and compare with the Monte Carlo truth efficiency to check for bias.} 
+\item{Scale the Monte Carlo efficiency (if necessary) to the data and calculate the final systematic uncertainty.}
+\end{list}
 
+This prescription limits one, for early data taking, to quantities that can be verified in the data from electrons.  Of course, constructing quantities that are similar for photons and electrons allows one to factorize the background somewhat, first there will be hadronic jets (which are discriminated against by the different isolation requirements), and isolated electromagnetic objects.  These electromagnetic objects, by means of a track veto, can then be separated into electrons and photons.
 \subsection{LooseEM efficiency}\label{ssec:LooseEMEff}
+As stated previously, one 
 
 \section{Photon Fake Rates and Purity}
 \subsection{Photon-Jet Fake Rate}
