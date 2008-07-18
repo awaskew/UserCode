@@ -143,15 +143,35 @@ cone such that the track isolation efficiency can be measured with electrons.}
 
 This prescription limits one, for early data taking, to quantities that can be verified in the data from electrons.  Of course, constructing quantities that are similar for photons and electrons allows one to factorize the background somewhat, first there will be hadronic jets (which are discriminated against by the different isolation requirements), and isolated electromagnetic objects.  These electromagnetic objects, by means of a track veto, can then be separated into electrons and photons.
 \subsection{LooseEM efficiency}\label{ssec:LooseEMEff}
-As stated previously, one 
+The base {\bf LooseEM} efficiency is determined using a tag-and-probe method.  $Z$-boson events are selected first by requiring two high $p_T$ tracks, one of which is required to pass tight quality requirements and match well in $\eta-\phi$ with an electromagnetic object in the ECAL.  The second serves as a probe, and along with the cluster matched to the tag, the invariant mass can be formed, to control possible backgrounds.  The efficiency then, is the rate at which the probe track is associated with a {\bf LooseEM} object in the calorimeter.
 
 \section{Photon Fake Rates and Purity}
 \subsection{Photon-Jet Fake Rate}
 \subsection{Photon-Electron Fake Rate}
 
+
 \section{Additional Backgrounds to Photons}
+As previously mentioned, since photons only manifest themselves as isolated clusters of energy in the electromagnetic calorimeter, they are subject to backgrounds from cosmic ray and beam halo muons which undergo bremsstrahlung in the calorimeter as they pass through.  For each of these backgrounds, one attempts to derive the contamination from these sources by identifying variables that are sensitive to the difference between these bremsstrahlung backgrounds and building templates from the data using tags.  Then along with templates from prompt electromagnetic objects in data, one can do fits to the final candidate distributions in the data to determine the final prompt fraction.
+
 \subsection{Beam Halo Muons}
 \subsection{Cosmic Ray Muons}
+
+\begin{figure}[hbtp]
+  \begin{center}
+    \resizebox{10cm}{10cm}{\includegraphics{CosmicPlots/photonID.eps}}
+    \caption{The energy weighted width in $\phi$ as a function of detector $\phi$ for prompt, direct photons from the interaction region.  No dependence is observed.}
+    \label{fig:PromptPhiWidPhi}
+  \end{center}
+\end{figure}
+
+\begin{figure}[hbtp]
+  \begin{center}
+    \resizebox{10cm}{10cm}{\includegraphics{CosmicPlots/CRUZET.eps}}
+    \caption{The energy weighted width in $\phi$ as a function of detector $\phi$ for electromagnetic objects found in
+CRUZET events.}
+    \label{fig:CRUZETPhiWidPhi}
+  \end{center}
+\end{figure}
 
 \section{Summary}
 
