@@ -60,24 +60,50 @@ example set of ``vanilla'' photon identification requirements are presented.
 
 \section{Introduction}
 Photon identification at hadron colliders is a difficult task, mainly due to the large backgrounds from hadronic jets and
-the lack of a di-photon signal resonance for studies.  This difficulty is further compounded by the fact that unlike electrons,
+the lack of a clean large cross-section resonance decaying into high $E_T$ photons for studies.  
+Radiative decays $Z\gamma\rightarrow\ell\ell\gamma$ events in which the photon is radiated off one of the final state leptons 
+can be selected and used for photon calibration \cite{uug_note}, but the rate of this decay is small and photons tend to be soft.
+This difficulty is further compounded by the fact that unlike electrons,
 photons are not redundant
 \footnote{Unconverted photons are not redundant.  For the special case of conversions with reconstructed
-tracks, please see~\cite{NancyConv}.}, e.g. they leave a signal in only one detector, the electromagnetic calorimeter.  Thus photons are subject to backgrounds (such as cosmic/halo muon bremsstrahlung) which do not typically afflict electrons.
-Worse, direct studies of photons for the purposes of determining efficiencies in the data are not possible for small amounts of integrated luminosity.  This is mitigated somewhat by the reconstruction of photons in $Z\gamma\rightarrow\ell\ell\gamma$ events in which the photon is radiated off one of the final state leptons.
+tracks, please see~\cite{NancyConv}.}, e.g. they leave a signal in only one detector, the electromagnetic calorimeter.  
+Thus, unlike elecrtons, tracker and calorimeter information can not be compared to get a handle on the reconstruction efficiency.
+Also, photons are subject to backgrounds (such as cosmic/halo muon bremsstrahlung) which do not typically afflict electrons.
+Special techniques are being developed to measure and reduce these non-collision backgrounds.
 
-For early (small) samples of integrated luminosity, one appeals to electrons to give information about relevant reconstruction quantities, for shower shape and isolation quantities.  It will be shown that for proper selection of analysis quantities, one may use the electrons from $Z\rightarrow ee$ to provide measurements of photon efficiencies, as well as templates for the determination of the purity in photon samples.  These efficiencies can then be (to the limit of available statistics) verified with early samples of $Z\gamma\rightarrow\ell\ell\gamma$.  Special tags are also developed to allow for the study of cosmic and beam halo muon events. 
+This note describes a possible strategy for doing physics with photons at very early stages of the experiment.
+CMS detector combines very heavy tracker with very strong magnetic field. The effects of both on electrons and photons are very significant, and are 
+unlikely to be well-described by the Monte Carlo simulation in the beginning of the run. 
+We show that a moderately effective photon identification can be constructed so that its efficiency and purity can be reliably measured with
+data itself.
+
+We show that some identification variables, like hollow cone track isolation and cluster width in $\eta$, are quite similar between electrons and 
+photons and therefore can be calibrated using $Z \rightarrow e e$ decays. 
+These efficiencies can then be (to the limit of available statistics) verified with early samples of $Z\gamma\rightarrow\ell\ell\gamma$.  
+We also show that selecting photon candidates failing hollow cone track isolation in multi-jet events 
+provides us with a clean sample of pure and minimally biased jet background for fake rate determination.
+
 
 \section{Photon Reconstruction and LooseEM}
-In order to utilize the flexibility of the photon reconstruction software, a base definition {\bf LooseEM} is defined to provide a starting point for both signal and background studies\footnote{There is a software delineation between the EgammaPhotonProducer package, which constructs the actual reco::Photon, and the PhotonIdentification package which is mainly concerned with the organization and analysis of reco::Photon objects.  The interested reader is referred to Appendix B.}.  The object of the {\bf LooseEM} definition is to provide a definition of objects that are reconstructed as photons which are 100\% efficient for true photons (produced in collisions), but still provides some rejection against fake photons from hadronic activity.  A {\bf LooseEM} for the purposes of this documents is defined as a reco::Photon which meets the following criteria:
+
+In order to utilize the flexibility of the photon reconstruction software, a base definition {\bf LooseEM} is defined to provide a starting point for both signal and background studies\footnote{There is a software delineation between the EgammaPhotonProducer package, which constructs the actual reco::Photon, and the PhotonIdentification package which is mainly concerned with the organization and analysis of reco::Photon objects.  The interested reader is referred to Appendix B.}.  The object of the {\bf LooseEM} definition is to provide a definition of objects that are reconstructed as photons which are 100\% efficient for true photons (produced in collisions), but provides some rejection against fake photons from hadronic activity. In particular, it ensures that a jet gives rise to not more than one of such objects, and that its energy is comparable to the parent parton. 
+
+A {\bf LooseEM} for the purposes of this documents is defined as a reco::Photon which meets the following criteria:
 \begin{list}{$\bullet$}
  \item{The reco::Photon must be isolated from other deposits of energy in the ECAL.  The sum of the energy deposited in a cone
-of $\Delta R <$0.4 minus the energy that is clustered into the photon must be smaller than 20~GeV.  This threshold may seem high (the distribution is presented in Figure~\ref{fig:EMiso_EMLoose}), realize that this is due to the fact that no threshold (except for $E_{crys} >$ 0 GeV) is applied to the hits considered.}
+of $\Delta R <$0.4 minus the energy that is clustered into the photon must be smaller than 20~GeV.  The distribution of the sum is presented in 
+Figure~\ref{fig:EMiso_EMLoose}. All crystals with $E_{crys} >$ 0 GeV are considered. Higher threshold is likely to improve the discrimination
+and is being optimized (also in context of electron and muon isolation).}
  \item{The reco::Photon must be isolated from surrounding deposits of energy in the HCAL.  The sum of the energy in the HCAL in
-a hollow cone of 0.1 $< \Delta R<$0.4 is required to be smaller than 10~GeV.  As mentioned in the above point, no threshold save that the cells are above 0 GeV is applied.  Note that the selection of this hollow cone is to make the measurement of this isolation quantity independent of the calculation of the hadronic-electromagnetic energy ratio.}
- \item{The reco::Photon is required to have its $HadOverEM$ ratio be smaller than 0.2.  $HadOverEM$ here is defined as the energy within $\Delta R=$0.1 of the supercluster centroid in the hadronic calorimeter divided by the energy of the supercluster.  As of the writing of this note (which stands astride software versions 2\_0 and 2\_1) this cut will become the default in the photon reconstruction used for startup.  Since the distributions shown depend on the earlier version of the reconstruction, this requirement can be shown to be very efficient for photons, and well in line with the philosophy of LooseEM selection.}
+a hollow cone of 0.1 $< \Delta R<$0.4 is required to be smaller than 10~GeV.  No threshold save that the cells are above 0 GeV is applied.  
+Note that the selection of this hollow cone is to make the measurement of this isolation quantity independent of the calculation of the 
+hadronic-electromagnetic energy ratio which is more sensitive to EM shower leakage.}
+ \item{The reco::Photon is required to have its $HadOverEM$ ratio be smaller than 0.2.  $HadOverEM$ here is defined as the energy within $\Delta R=$0.1 of the supercluster centroid in the hadronic calorimeter divided by the energy of the supercluster.}  
 \end{list}
-Distributions of each of these quantities are shown for nominal samples of signal and background in Figures~\ref{fig:EMiso_EMLoose},~\ref{fig:HCALiso_EMLoose}, and~\ref{fig:HadOverEM_EMLoose}.  All of these distributions are shown for barrel photons only, and here, this document will concentrate explicitly on barrel only since these will be available at startup.
+In the future versions of the reconstruction, the {\bf LooseEM} criteria will be applied at the time of photon reconstruction. 
+
+Distributions of each of these quantities are shown for nominal samples of signal and background in Figures~\ref{fig:EMiso_EMLoose},~\ref{fig:HCALiso_EMLoose}, and~\ref{fig:HadOverEM_EMLoose}.  All of these distributions are shown for barrel photons only.
+
 \begin{figure}[hbtp]
   \begin{center}
     \resizebox{10cm}{10cm}{\includegraphics{EMLoose/EMiso_EMLoose.eps}}
@@ -99,6 +125,7 @@ Distributions of each of these quantities are shown for nominal samples of signa
     \label{fig:HadOverEM_EMLoose}
   \end{center}
 \end{figure}
+
 The signal sample shown here is a sample of QCD direct photon production produced privately in CMSSW\_2\_1\_0\_pre5, in which the generated photon was required to match to a reconstructed reco::Photon object.  The background sample was a sample of inclusive QCD dijets which were produced in the official CSA08 production, which made use of CMSSW\_2\_0\_5.  As previously mentioned, only barrel photons are considered here, and further, the photon $E_{T}$ is required to be greater than 20~GeV.
 As one can see, these cuts remove a significant portion of the jet background, while retaining most if not all of the true photons.  The efficiency of these cuts, and their measurement from the data is discussed in Section~\ref{ssec:LooseEMEff}.
 
@@ -144,7 +171,11 @@ cone such that the track isolation efficiency can be measured with electrons.}
 This prescription limits one, for early data taking, to quantities that can be verified in the data from electrons.  Of course, constructing quantities that are similar for photons and electrons allows one to factorize the background somewhat, first there will be hadronic jets (which are discriminated against by the different isolation requirements), and isolated electromagnetic objects.  These electromagnetic objects, by means of a track veto, can then be separated into electrons and photons.
 
 \subsection{LooseEM efficiency}\label{ssec:LooseEMEff}
-The base {\bf LooseEM} efficiency is determined using a tag-and-probe method.  $Z$-boson events are selected first by requiring two high $p_T$ tracks, one of which is required to pass tight quality requirements and match well in $\eta-\phi$ with an electromagnetic object in the ECAL.  The second serves as a probe, and along with the cluster matched to the tag, the invariant mass can be formed, to control possible backgrounds.  The efficiency then, is the rate at which the probe track is associated with a {\bf LooseEM} object in the calorimeter.
+
+It is very hard to measure clustering efficiency of an unconverted photon. For this, we have to rely on Monte Carlo.
+However, the MC here can be cross-checked using electrons, and if the efficiency is large then the resulting systematic error can be made small. 
+
+The {\bf LooseEM} efficiency for electrons is determined using a tag-and-probe method.  $Z$-boson events are selected first by requiring two high $p_T$ tracks, one of which is required to pass tight quality requirements and match well in $\eta-\phi$ with an electromagnetic object in the ECAL.  The second serves as a probe, and along with the cluster matched to the tag, the invariant mass can be formed, to control possible backgrounds.  The efficiency then, is the rate at which the probe track is associated with a {\bf LooseEM} object in the calorimeter.
 
 \section{Photon Fake Rates and Purity}
 \subsection{Photon-Jet Fake Rate}
@@ -154,8 +185,27 @@ The base {\bf LooseEM} efficiency is determined using a tag-and-probe method.  $
 \section{Additional Backgrounds to Photons}
 As previously mentioned, since photons only manifest themselves as isolated clusters of energy in the electromagnetic calorimeter, they are subject to backgrounds from cosmic ray and beam halo muons which undergo bremsstrahlung in the calorimeter as they pass through.  For each of these backgrounds, one attempts to derive the contamination from these sources by identifying variables that are sensitive to the difference between these bremsstrahlung backgrounds and building templates from the data using tags.  Then along with templates from prompt electromagnetic objects in data, one can do fits to the final candidate distributions in the data to determine the final prompt fraction.
 
+The handles that we consider are:
+\begin{itemize}
+\item recnostructed time in the ECAL
+\item shape of the ECAL energy deposition
+\item reconstructing matching (in space and time) signals in HCAL and Muon systems   
+\end{itemize}
+
 \subsection{Beam Halo Muons}
+
+\subsubsection{ECAL timing}
+
+\subsubsection{shower shape}
+
+\subsubsection{ECAL-CSC correlations}
+
+\subsubsection{ECAL-HE correlations}
+
+
 \subsection{Cosmic Ray Muons}
+
+\subsubsection{shower shape}
 
 \begin{figure}[hbtp]
   \begin{center}
@@ -173,6 +223,9 @@ CRUZET events.}
     \label{fig:CRUZETPhiWidPhi}
   \end{center}
 \end{figure}
+
+\subsubsection{ECAL - Muon Correlations}
+
 
 \section{Summary}
 
