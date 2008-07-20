@@ -55,6 +55,10 @@ example set of ``vanilla'' photon identification requirements are presented.
 %\note{Preliminary version}
   
 \end{titlepage}
+\tableofcontents
+\listoffigures
+\listoftables
+\pagebreak
 
 \setcounter{page}{2}%JPP
 
@@ -100,7 +104,6 @@ Note that the selection of this hollow cone is to make the measurement of this i
 hadronic-electromagnetic energy ratio which is more sensitive to EM shower leakage.}
  \item{The reco::Photon is required to have its $HadOverEM$ ratio be smaller than 0.2.  $HadOverEM$ here is defined as the energy within $\Delta R=$0.1 of the supercluster centroid in the hadronic calorimeter divided by the energy of the supercluster.}  
 \end{list}
-In the future versions of the reconstruction, the {\bf LooseEM} criteria will be applied at the time of photon reconstruction. 
 
 Distributions of each of these quantities are shown for nominal samples of signal and background in Figures~\ref{fig:EMiso_EMLoose},~\ref{fig:HCALiso_EMLoose}, and~\ref{fig:HadOverEM_EMLoose}.  All of these distributions are shown for barrel photons only.
 
@@ -121,7 +124,7 @@ Distributions of each of these quantities are shown for nominal samples of signa
 \begin{figure}[hbtp]
   \begin{center}
     \resizebox{10cm}{10cm}{\includegraphics{EMLoose/HadOverEM_EMLoose.eps}}
-    \caption{HadOverEM ratio for direct photons (blue) and for fakes from dijets (red).}
+    \caption{HadOverEM ratio for direct photons (blue) and for fakes from dijets (red).  No photon overflows are present.}
     \label{fig:HadOverEM_EMLoose}
   \end{center}
 \end{figure}
@@ -194,6 +197,23 @@ The handles that we consider are:
 
 \subsection{Beam Halo Muons}
 
+%original text from Tia, edited by A.A.
+"Halo muons" are a muons that travel along with the proton beams. They are
+produced by beam protons hitting residual gas (or the sides of the
+beam pipe), then showering to pions, which subsequent decay to muons.
+These muons could leave evidence in the CMS detector through interacting with
+the material.
+
+There is halo shielding prior to the CMS detector, and there are halo
+triggers to reject halo events (or select them for the purposes of alignment). 
+Some muons may still leave evidence in the recorded events.  If a muon crosses through the 
+ECAL and bremsstrahlungs, this process could be mistaken for a prompt photon. 
+We are currently investigating the shower shape and timing of a halo muon bremstrahlung compared with
+the shower shape and timing of prompt photons.  It is expected that halo muon
+bremsstralung shower shape will be extended in eta (halo muons travel
+parallel to beam), while the prompt photon shower shape will be well constrained, if perhaps
+extended in phi (if the photon converts to an e- e+ pair, the strong
+magnetic field will bend the pair to extend its energy deposit in phi).
 \subsubsection{ECAL timing}
 
 \subsubsection{shower shape}
@@ -241,6 +261,22 @@ CRUZET events.}
 \section{Photon Energy Scale}
 
 \section{Photon Software Organization and Use}
+The software for the reconstruction and identification of photons is logically
+split into two parts.  The first, is the CVS package RecoEgamma/EgammaPhotonProducers.  For each ECAL 
+supercluster in the barrel or endcap which meets the preselection requirements, a reco::Photon object 
+is created.  At the time of this writing, the preselection requirements are simply that the 
+supercluster must be at least 10~GeV in $E_T$, though additional switches for cuts on $HadOverEM$ 
+and isolation are included for future use.  The second part of the software infrastructure is the
+CVS package RecoEgamma/PhotonIdentification.  For every reco::Photon object that is created, a corresponding
+reco::PhotonID object is created, and an association made and stored in the Event.
+The purpose of the reco::Photon object is to organize most of the reconstruction level quantities associated
+with the photon (the supercluster, the presence or absence of conversion tracks, the calculated photon 
+position, etc.).  The purpose of the ``helper'' object reco::PhotonID is to provide additional information
+in order to allow users to select reconstructed photon objects that satisfy at least the criteria set
+forth in this note.  The reco::PhotonID object (stored in DataFormats/EgammaCandidates) contains information
+on the isolation of the photon (calculated using the RecoEgamma/EgammaIsolationAlgos) as well as several
+flags concerning the position of the photon with respect to both the barrel-endcap junction and the 
+supermodule boundaries and fiducial locations in detector $\eta-\phi$.  Quality flags, defined for {\bf LooseEM}, {\bf LoosePhoton} and {\bf TightPhoton} are also set based on the criteria defined in the configuration file.
 
 \section{Photon Identification at High Energies}
 
