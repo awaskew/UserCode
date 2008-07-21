@@ -1,4 +1,6 @@
 \documentclass{cmspaper}
+\usepackage{epsf}
+\usepackage{epsfig}
 \begin{document}
 
 %==============================================================================
@@ -183,6 +185,123 @@ However, the MC here can be cross-checked using electrons, and if the efficiency
 
 The {\bf LooseEM} efficiency for electrons is determined using a tag-and-probe method.  $Z$-boson events are selected first by requiring two high $p_T$ tracks, one of which is required to pass tight quality requirements and match well in $\eta-\phi$ with an electromagnetic object in the ECAL.  The second serves as a probe, and along with the cluster matched to the tag, the invariant mass can be formed, to control possible backgrounds.  The efficiency then, is the rate at which the probe track is associated with a {\bf LooseEM} object in the calorimeter.
 
+\subsection{Photon Efficiencies}
+
+\subsection{Photon ID with \boldmath $\mathrm{Z}\to \ell^+\ell^- \gamma$ Events}
+As described in the previous section, the
+performance of photon identification cuts  can be  studied with $\mathrm{Z} \to\mathrm{e}^+\mathrm{e}^-$
+decays. However, the majority of electrons lose a significant amount of energy in the tracker via bremsstrahlung while curving 
+in the strong magnetic field of CMS. On contrary, a large fraction of central photons will not convert until reaching
+the ECAL. In addition, the effects of photon conversions cannot be reliably studied
+with electrons. Therefore, it is preferable to cross-check the results of such studies with a photon-enriched sample.
+At LHC, the center-of-mass energy and luminosity are high enough to provide a source of clean isolated photons
+ from radiative Z decays  $\mathrm{Z}\to \ell^+\ell^- \gamma$, $\ell =\mathrm{e},\mu$. 
+In this section, we describe the event selection in the presence of significant
+hadronic backgrounds and give  estimates of the expected photon yields.
+
+
+To obtain predictions for the  $\mathrm{Z}\to \ell^+\ell^- \gamma$ signal (FSR) and backgrounds from initial-state
+radiation and $\mathrm{Z}+jets$, the  inclusive
+PYTHIA $\mathrm{pp} \to (\mathrm{Z^*}/\gamma^*) \to \ell^+\ell^-$ samples are used. Here the FSR signal is isolated
+by using the generator-level matching.
+The inclusive $\mathrm{pp} \to t\bar{t}$  background was produced with TOPREX. To estimate
+the   $\mathrm{pp} \to b\bar{b}$ we used both the ``official'' ppllX sample, as well as a privately produced
+sample of $ b\bar{b} \to \ell^+\ell^- +X$ events. The above MC samples for the $ \mu^+\mu^- \gamma$ final
+state are detailed in Table~\ref{tab:lgamma}.
+
+\newcommand{\bbmmX}{\ensuremath{b\bar{b}\rightarrow \mu^+\mu^-X}}
+\newcommand{\ttbar}{\ensuremath{t\bar{t}}}
+
+  \begin{table}[htb]
+    \caption{Monte Carlo data samples used in this study.}
+%    \label{tab:mcsamples}
+    \begin{center}
+      \begin{tabular}{|l|r|r|r|l|} \hline
+                 & \multicolumn{1}{l|}{Events per $100 pb^{-1}$}
+                          &                &          &
+                             \\
+        Process     & \multicolumn{1}{l|}{after selection}
+                          & $N_\mathrm{evt}$
+                                & \multicolumn{1}{c|}{$\sigma$}
+                                           & DBS
+                             \\
+      \hline\hline
+        incl. Z  & 571 (FSR) + 44 (bkgd.)
+                          &  1M & 835 pb   &
+/Zmumu/CMSSW\_1\_6\_7-CSA07-1192835913                 \\
+        \ttbar   & 16     &  1M & 850 pb   &
+/ttbar\_inclusive\_TopRex/CMSSW\_1\_3\_1-Spring07-1122 \\
+        \bbmmX   & 14     &  1M & 7.52 nb  & private production with
+CMSSW\_1\_6\_7                 \\
+        $pp\rightarrow l^+l^-X$
+                 &        &  2M & 335 nb   &
+/ppllX/CMSSW\_1\_6\_7-CSA07-1201845688/RECO            \\
+      \hline
+      \end{tabular}
+    \end{center}
+  \end{table} \label{tab:lgamma}
+
+
+We require that the leading lepton candidate should have $E_T > 15$~GeV, and the trailing lepton  $E_T > 10$~GeV.
+The photon candidate is required to be in the barrel region and have  $E_T > 10$~GeV.
+We then apply kinematic cuts to improve the signal-to-background ratio. 
+Signal photons are radiated from leptons so that their direction should be close to the direction of 
+one of the leptons in the event. We require that the $\Delta R$ distance between the closest lepton and photon
+should be less than 0.9 (see Figure~\ref{fig:llgamma}a). 
+Since one of the main backgrounds is Drell-Yan, it can be suppressed with a cut on the $\ell^+\ell^-$ invariant mass 
+$45 < M_{\ell\ell} < 85$~GeV, as shown in Figure~\ref{fig:llgamma}b). The  $t\bar{t}$ events are expected to have
+a significant jet activity in the detector. To suppress such events, we apply a simple jet-veto by
+requiring that the $E_T$ of the second leading central jet that is not matched to the photon 
+ ($\Delta R > 0.4$) should be below 25~GeV 
+(see Figure~\ref{fig:llgamma}c). Furthermore, to suppress the $b\bar{b}$ background we apply stringent
+ECAL, HCAL, and and track isolation cuts on the lepton furthest away from the photon. No 
+isolation requirements on the
+photon candidate or the lepton closest to it are applied, which should make the future studies of the photon ID cuts
+virtually unbiased. Finally, we require that the three-body $\ell^+\ell^-\gamma$ invariant mass should
+be close to the Z mass: $ 85 < M_{\ell\ell\gamma} < 97$~GeV.
+
+As shown in Figure~\ref{fig:llgamma}d), the $E_T$  spectrum of the photon candidates is quite soft, however
+an almost complete suppression of the background is possible for the  $\mu^+\mu^-\gamma$ final state.
+The expected event yield is expected to be about 650 events per 100~pb$^{-1}$, with a sample purity of 89\%.
+Increasing the photon $E_T$ cut to $E_T > 20$~GeV, will reduce the signal sample by 70\%. The expected
+event rates for the signal and considered backgrounds are detailed in Table~\ref{tab:lgamma}.
+
+Due to possible overlap of the electron and photon showers, a similar  selection of 
+the $\mathrm{e}^+\mathrm{e}^-\gamma$
+events is less efficient. The total event yield is found to be about 320~events per 100~pb$^{-1}$, 
+with a sample purity of 74\%. The obtained three-body invariant mass spectra are compared 
+in Figures~\ref{fig:llgamma}e,f). For both final states, the  $\ell^+\ell^-\gamma$ peak width 
+is found to be about 4\%.
+
+
+\begin{figure}[p]
+  \begin{center}
+    \includegraphics[width=0.46\linewidth]{zgammafigs/drMinGM.eps}
+    \includegraphics[width=0.46\linewidth]{zgammafigs/drmMM.eps} %%\\[2mm]
+    \includegraphics[width=0.46\linewidth]{zgammafigs/ptJL2.eps}
+    \includegraphics[width=0.46\linewidth]{zgammafigs/etG.eps} %%\\[2mm]
+    \includegraphics[width=0.46\linewidth]{zgammafigs/mMMG.eps}
+    \includegraphics[width=0.46\linewidth]{zgammafigs/meeg.eps} %%\\[2mm]
+\caption{
+``N-1'' Distributions of a) $\Delta R$ distance between the closest muon and photon, 
+b) invariant mass of the $\mu^+\mu^-$ system, and c) $E_T$ of the second leading central
+jets, where all other cuts have been applied. The corresponding cut value is indicated
+by an arrow. d) The $E_T$ spectrum of the photon candidates. Reconstructed $\ell^+\ell^- \gamma$ invariant 
+mass for the obtained e) $\mu^+\mu^-\gamma$ and d) $\mathrm{e}^+\mathrm{e}^-\gamma$ samples.
+}
+%\vspace*{-0.3cm}
+  \end{center}
+\end{figure} \label{fig:llgamma}
+
+
+
+
+In conclusion, the  $\mathrm{Z}\to \ell^+\ell^- \gamma$  process is expected to provide a clean sample
+of about 1000 photons after 100~pb$^{-1}$. As neither calorimeter nor track isolation cuts on the
+photon candidate have to be used in the event selection, this sample will provide us with an important
+cross check of the photon ID studies performed with electrons. In particular, it will be useful
+for studying effects of the photon conversions and track veto.
+
 \section{Photon Fake Rates and Purity}
 \subsection{Photon-Jet Fake Rate}
 \subsection{Photon-Electron Fake Rate}
@@ -253,7 +372,8 @@ CRUZET events.}
 \section{Summary}
 
 \begin{thebibliography}{9}
-\bibitem{NancyConv}  CMSNote XXXX
+\bibitem{uug_note}  Not sure what goes here.
+\bibitem{NancyConv}  N. Marinelli, ``Track finding and identification of converted photons.''  CMS Note 2006/005.
 
 
 \end{thebibliography}
