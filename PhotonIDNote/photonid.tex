@@ -176,8 +176,7 @@ cone such that the track isolation efficiency can be measured with electrons.}
 \item{Scale the Monte Carlo efficiency (if necessary) to the data and calculate the final systematic uncertainty.}
 \end{list}
 
-This prescription limits one, for early data taking, to quantities that can be verified in the data from electrons.  Of course, constructing quantities that are similar for photons and electrons allows one to factorize the background somewhat, first there will be hadronic jets (which are discriminated against by the different isolation requirements), and isolated electromagnetic objects.  These electromagnetic objects, by means of a track veto, can then be separated into electrons and photons.
-
+This prescription limits one, for early data taking, to quantities that can be verified in the data from electrons.  Of course, constructing quantities that are similar for photons and electrons allows one to factorize the background somewhat, first there will be hadronic jets (which are discriminated against by the different isolation requirements), and isolated electromagnetic objects.  These electromagnetic objects, by means of a track veto, can then be separated into electrons and photons. 
 \subsection{LooseEM efficiency}\label{ssec:LooseEMEff}
 
 It is very hard to measure clustering efficiency of an unconverted photon. For this, we have to rely on Monte Carlo.
@@ -186,6 +185,24 @@ However, the MC here can be cross-checked using electrons, and if the efficiency
 The {\bf LooseEM} efficiency for electrons is determined using a tag-and-probe method.  $Z$-boson events are selected first by requiring two high $p_T$ tracks, one of which is required to pass tight quality requirements and match well in $\eta-\phi$ with an electromagnetic object in the ECAL.  The second serves as a probe, and along with the cluster matched to the tag, the invariant mass can be formed, to control possible backgrounds.  The efficiency then, is the rate at which the probe track is associated with a {\bf LooseEM} object in the calorimeter.
 
 \subsection{Photon Efficiencies}
+
+\subsubsection{Track Isolation Inner Cone}
+As previously mentioned, the track isolation cut is meant to be efficient for both electrons and photons.  The goal of this requirement is to separate
+electromagnetic objects such as electrons and photons from hadronic fakes (from dijets).  Thus the inner cone of the track isolation hollow cone must be set such that it does not include the tracks from electrons, and ideally, gives a similar efficiency for electrons and photons.  
+In the Monte Carlo, a study was performed to determine the width of this inner cone.  A sample of $Z\rightarrow ee$ events, from the CSA08 start up scenario
+Monte Carlo was used, along with the previously mentioned direct photon Monte Carlo.  A tag and probe method was used on the $Z$ events, requiring two barrel {\bf LooseEM} objects, with $E_T$ greater than 20~GeV.  One of these objects, the tag, was required to match spatially well to a high $p_T$ track (greater than 10~GeV), while the track isolation was calculated for the other object.  The events passing and failing this tag-and-probe method in the invariant
+mass range from 80-100~GeV were then summed up and the efficiency calculated.  This efficiency was then compared to the Monte Carlo truth efficiency for
+the electrons, with no tag-probe requirements (associating the Monte Carlo electron to a reconstructed {\bf LooseEM} object and subsequently calcuating the track isolation).  Then these curves were compared with the truth efficiency for photon objects (similar to the truth efficiency for the electrons).  These efficiencies are shown in Figure~\ref{fig:innerConeScan}.  As one can see, the probability for the track from the electron to fall outside of the inner cone
+is minimized at $\Delta R >$0.04.  These efficiencies are also in good agreement with the efficiency of the photon at this point as well.
+
+\begin{figure}[hbtp]
+  \begin{center}
+    \resizebox{10cm}{10cm}{\includegraphics{PhotonSel/CompareFinalTrkInnerCone.eps}}
+    \caption{Efficiency of requiring that the sum of track $p_T$ in a hollow cone is smaller than 5~GeV as a function of the inner cone radius.  The efficiency of the tag-and-probe method on Monte Carlo electrons is shown in red.  The efficiency of the Monte Carlo truth electrons is shown in black.  The Monte
+Carlo truth efficiency for photons is shown in green.}
+    \label{fig:innerConeScan}
+  \end{center}
+\end{figure}
 
 \subsection{Photon ID with \boldmath $\mathrm{Z}\to \ell^+\ell^- \gamma$ Events}
 As described in the previous section, the
