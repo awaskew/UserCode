@@ -41,6 +41,9 @@
     J.~Lamb
         \Instfoot{UCSB}{University of California at Santa Barbara, Santa Barbara, CA.}
 
+    M.~Mozer
+	\Instfoot{IIHE}{IIHE, Brussels, Belguim.}
+
   \end{Authlist}
 
 % if needed, use the following:
@@ -401,6 +404,7 @@ CRUZET events.}
 \section{Photon Energy Scale}
 
 \section{Photon Software Organization and Use}
+\subsection{Infrastructure}
 The software for the reconstruction and identification of photons is logically
 split into two parts.  The first, is the CVS package RecoEgamma/EgammaPhotonProducers.  For each ECAL 
 supercluster in the barrel or endcap which meets the preselection requirements, a reco::Photon object 
@@ -417,6 +421,22 @@ forth in this note.  The reco::PhotonID object (stored in DataFormats/EgammaCand
 on the isolation of the photon (calculated using the RecoEgamma/EgammaIsolationAlgos) as well as several
 flags concerning the position of the photon with respect to both the barrel-endcap junction and the 
 supermodule boundaries and fiducial locations in detector $\eta-\phi$.  Quality flags, defined for {\bf LooseEM}, {\bf LoosePhoton} and {\bf TightPhoton} are also set based on the criteria defined in the configuration file.
+
+\subsection{Photon Isolation}
+Tools to compute various isolation variables for electrons and photons are available in the
+package RecoEgamma/EgammaIsolationAlgos.  These are the tools called by RecoEgamma/PhotonIdentification for the
+calculation of the isolation.
+
+For verion 2\_1\_0 of the CMSSW software this package has been extensively reworked, to produce 
+reco::IsoDeposit. These ``Isodeposits'' store the basic information about each of the objects isolated against (crystals in the ECAL, tracks, etc.) 
+and thus allow the the isolation to be recomputed with varying cuts on cone size, $E_T$ thresholds and similar variables,
+ even if the original objects have been dropped.
+Compared to the previous implementation, this switch provides increased flexibility. Additionally, the improved
+isolation code is structurally parallel to the muon isolation code, easing the implementation of higher level analysis.
+The approach has been been tested and shown to work well for HCAL and track isolation.
+For the ECAL-isolation, physics performance has been shown to be good, but technical issues remain to be adressed. 
+In particular the large number of crystals contained in typical isolation cones leads to large disk-space requirements and long
+execution times. Several solutions are currently under study.
 
 \section{Photon Identification at High Energies}
 
