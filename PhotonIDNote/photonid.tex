@@ -384,7 +384,31 @@ magnetic field will bend the pair to extend its energy deposit in phi).
 \subsubsection{ECAL-CSC correlations}
 
 \subsubsection{ECAL-HE correlations}
+For beam halo Monte Carlo events, a correlation is observed between depositions of energy in the
+HCAL Endcap (HE) and the ECAL barrel.  If the difference in phi between these deposits is constructed
+(for a significant amount of energy in the HE), one can see an obvious peak (see Figure~\ref{fig:BHdPhi}).
 
+Using this correlation, one may `tag' photon events as originating from beam halo.  For a given
+reco::Photon to be identified as beam halo in this way:
+\begin{list}{$\bullet$}
+\item{The difference between the EB photon position and the HE energy deposition must be smaller than
+0.08 in $\Delta\phi$.}
+\item{The energy of the HE rechit for satisfying the cut must be greater than XX GeV.}
+\end{list}
+In principle, the timing information for the HE may also be exploited to provide further evidence that
+this photon originates from an out-of-time background.
+
+`Tagging' these beam halo events has a dual purpose.  In the data, tagging these events with high
+purity will allow for studies of the photons that originate from beam halo for the purposes of 
+study and statistical separation.  At the same time, if the tag is of sufficient efficiency, one
+may in turn use the tag to discriminate against potential signal candidate events which also show
+this correlation.  In the data, this may be checked against prompt electromagnetic objects, such as 
+W$\rightarrow e\nu$, wherein the number of events rejected by applying the tag can give a handle on
+the efficiency of using this tag as a veto.
+
+A Monte Carlo exercise was performed to determine an operating point for the tagger cuts listed above.  It
+was found that XX\% of W$\rightarrow e\nu$ events were rejected by the veto, and a corresponding YY\%
+of beam halo Monte Carlo (in which there was a supercluster of ZZ~GeV present) were accepted.
 
 \subsection{Cosmic Ray Muons}
 
