@@ -26,7 +26,7 @@
     M.~Gataullin, V.~Litvin, J.~Veverka, 
 	\Instfoot{CalTech}{California Institute of Technology, Pasadena, CA.}
 
-    T.~Miceli, J.~Stilley,
+    C.~Kopecky, T.~Miceli, J.~Stilley, M.~Tripathi
 	\Instfoot{UCDavis}{University of California at Davis, Davis, CA.}
 
     V.~Gaultney,
@@ -43,6 +43,9 @@
 
     M.~Mozer
 	\Instfoot{IIHE}{IIHE, Brussels, Belguim.}
+
+    N.~Marinelli
+        \Instfoot{ND}{University of Notre Dame, Notre Dame, IN}
 
   \end{Authlist}
 
@@ -98,14 +101,22 @@ provides us with a clean sample of pure and minimally biased jet background for 
 
 \section{Photon Reconstruction and LooseEM}
 
-In order to utilize the flexibility of the photon reconstruction software, a base definition {\bf LooseEM} is defined to provide a starting point for both signal and background studies\footnote{There is a software delineation between the EgammaPhotonProducer package, which constructs the actual reco::Photon, and the PhotonIdentification package which is mainly concerned with the organization and analysis of reco::Photon objects.  The interested reader is referred to Appendix B.}.  The object of the {\bf LooseEM} definition is to provide a definition of objects that are reconstructed as photons which are 100\% efficient for true photons (produced in collisions), but provides some rejection against fake photons from hadronic activity. In particular, it ensures that a jet gives rise to not more than one of such objects, and that its energy is comparable to the parent parton. 
+In order to utilize the flexibility of the photon reconstruction software, a base definition {\bf LooseEM} 
+is defined to provide a starting point for both signal and background studies\footnote{There is a software 
+delineation between the EgammaPhotonProducer package, which constructs the actual reco::Photon, and the 
+PhotonIdentification package which is mainly concerned with the organization and analysis of reco::Photon 
+objects.  The interested reader is referred to Appendix B.}.  The object of the {\bf LooseEM} definition is 
+to provide a definition of objects that are reconstructed as photons which are 100\% efficient for true photons 
+(produced in collisions), but provides some rejection against fake photons from hadronic activity. In particular, 
+it ensures that a jet gives rise to not more than one of such objects, and that its energy is comparable to 
+the parent parton. 
 
 A {\bf LooseEM} for the purposes of this documents is defined as a reco::Photon which meets the following criteria:
 \begin{list}{$\bullet$}
  \item{The reco::Photon must be isolated from other deposits of energy in the ECAL.  The sum of the energy deposited in a cone
 of $\Delta R <$0.4 minus the energy that is clustered into the photon must be smaller than 20~GeV.  The distribution of the sum is presented in 
-Figure~\ref{fig:EMiso_EMLoose}. All crystals with $E_{crys} >$ 0 GeV are considered. Higher threshold is likely to improve the discrimination
-and is being optimized (also in context of electron and muon isolation).}
+Figure~\ref{fig:EMiso_EMLoose}. All crystals with $E_{crys} >$ 0 GeV are considered. Higher thresholds are likely to improve the discrimination
+and are being optimized (also in context of electron and muon isolation).}
  \item{The reco::Photon must be isolated from surrounding deposits of energy in the HCAL.  The sum of the energy in the HCAL in
 a hollow cone of 0.1 $< \Delta R<$0.4 is required to be smaller than 10~GeV.  No threshold save that the cells are above 0 GeV is applied.  
 Note that the selection of this hollow cone is to make the measurement of this isolation quantity independent of the calculation of the 
@@ -137,16 +148,22 @@ Distributions of each of these quantities are shown for nominal samples of signa
   \end{center}
 \end{figure}
 
-The signal sample shown here is a sample of QCD direct photon production (explicitly generated in the 40-60~GeV range) produced privately in CMSSW\_2\_1\_0\_pre5, in which the generated photon was required to match to a reconstructed reco::Photon object.  The background sample was a sample of inclusive QCD dijets which were produced in the official CSA08 production, which made use of CMSSW\_2\_0\_5.  As previously mentioned, only barrel photons are considered here, and further, the photon $E_{T}$ is required to be greater than 20~GeV.
-As one can see, these cuts remove a significant portion of the jet background, while retaining most if not all of the true photons.  The efficiency of these cuts, and their measurement from the data is discussed in Section~\ref{ssec:LooseEMEff}.
+The signal sample shown here is a sample of QCD direct photon production (explicitly generated in the 40-60~GeV range) produced privately 
+in CMSSW\_2\_1\_0\_pre5, in which the generated photon was required to match to a reconstructed reco::Photon object.  The background sample 
+was a sample of inclusive QCD dijets which were produced in the official CSA08 production, which made use of CMSSW\_2\_0\_5.  As previously 
+mentioned, only barrel photons are considered here, and further, the photon $E_{T}$ is required to be greater than 20~GeV.
+As one can see, these cuts remove a significant portion of the jet background, while retaining most if not all of the true photons.  
+The efficiency of these cuts, and their measurement from the data is discussed in Section~\ref{ssec:LooseEMEff}.
 
 \section{Photon Identification Quantities and Selection}
-With the base {\bf LooseEM} definition in place, more specific selection cuts for photon identification may be chosen.  Two additional definitions are made here {\bf LoosePhoton} and {\bf TightPhoton}.  
+With the base {\bf LooseEM} definition in place, more specific selection cuts for photon identification may be chosen.  Two additional 
+definitions are made here {\bf LoosePhoton} and {\bf TightPhoton}.  
 A {\bf LoosePhoton} is defined as a {\bf LooseEM} with:
 \begin{list}{$\bullet$}
  \item{$HadOverEM$ ratio of smaller than 0.1.}
 \item{Isolation from electromagnetic activity (as defined in {\bf LooseEM}) smaller than 15 GeV.}
-\item{The sum of the $p_{T}$ of tracks within a hollow cone of $\Delta R<$(0.4-0.0X) is required to be smaller than 5 GeV.}
+\item{The sum of the $p_{T}$ of tracks within a hollow cone of $\Delta R<$(0.4-0.04) is required to be smaller than 5 GeV.  Only tracks which are
+within 2~cm of the reconstructed vertex z-position are considered for this sum.}
 \end{list}
 A {\bf TightPhoton} satisfies all of the cuts from the {\bf LoosePhoton}, but with the additional requirement that its R9 variable (defined in Eqn.~\ref{eqn:R9}) is greater than 0.8.
 \begin{equation}
@@ -182,10 +199,14 @@ cone such that the track isolation efficiency can be measured with electrons.}
 This prescription limits one, for early data taking, to quantities that can be verified in the data from electrons.  Of course, constructing quantities that are similar for photons and electrons allows one to factorize the background somewhat, first there will be hadronic jets (which are discriminated against by the different isolation requirements), and isolated electromagnetic objects.  These electromagnetic objects, by means of a track veto, can then be separated into electrons and photons. 
 \subsection{LooseEM efficiency}\label{ssec:LooseEMEff}
 
-It is very hard to measure clustering efficiency of an unconverted photon. For this, we have to rely on Monte Carlo.
-However, the MC here can be cross-checked using electrons, and if the efficiency is large then the resulting systematic error can be made small. 
+It is very difficult to measure the clustering efficiency of an unconverted photon. For this, we must rely on Monte Carlo.
+However, the Monte Carlo can be cross-checked using electrons, and if the measured efficiency is large then the resulting systematic 
+error can be made small. 
 
-The {\bf LooseEM} efficiency for electrons is determined using a tag-and-probe method.  $Z$-boson events are selected first by requiring two high $p_T$ tracks, one of which is required to pass tight quality requirements and match well in $\eta-\phi$ with an electromagnetic object in the ECAL.  The second serves as a probe, and along with the cluster matched to the tag, the invariant mass can be formed, to control possible backgrounds.  The efficiency then, is the rate at which the probe track is associated with a {\bf LooseEM} object in the calorimeter.
+The {\bf LooseEM} efficiency for electrons is determined using a tag-and-probe method.  $Z$-boson events are selected first by requiring two 
+high $p_T$ tracks, one of which is required to match well (in $\eta-\phi$) with an electromagnetic object in the ECAL.  The second serves as a probe, 
+and along with the cluster matched to the tag, the invariant mass can be formed, to control possible backgrounds.  The efficiency then, is the 
+rate at which the probe track is associated with a {\bf LooseEM} object in the calorimeter.
 
 \subsection{Photon Efficiencies}
 
@@ -406,37 +427,61 @@ CRUZET events.}
 \section{Photon Software Organization and Use}
 \subsection{Infrastructure}
 The software for the reconstruction and identification of photons is logically
-split into two parts.  The first, is the CVS package RecoEgamma/EgammaPhotonProducers.  For each ECAL 
-supercluster in the barrel or endcap which meets the preselection requirements, a reco::Photon object 
-is created.  At the time of this writing, the preselection requirements are simply that the 
-supercluster must be at least 10~GeV in $E_T$, though additional switches for cuts on $HadOverEM$ 
-and isolation are included for future use.  The second part of the software infrastructure is the
-CVS package RecoEgamma/PhotonIdentification.  For every reco::Photon object that is created, a corresponding
-reco::PhotonID object is created, and an association made and stored in the Event.
-The purpose of the reco::Photon object is to organize most of the reconstruction level quantities associated
-with the photon (the supercluster, the presence or absence of conversion tracks, the calculated photon 
-position, etc.).  The purpose of the ``helper'' object reco::PhotonID is to provide additional information
-in order to allow users to select reconstructed photon objects that satisfy at least the criteria set
-forth in this note.  The reco::PhotonID object (stored in DataFormats/EgammaCandidates) contains information
-on the isolation of the photon (calculated using the RecoEgamma/EgammaIsolationAlgos) as well as several
+divided into two parts to ensure flexibility.  
+
+
+The first part, is encapsulated in the CVS package RecoEgamma/EgammaPhotonProducers.  
+For each ECAL supercluster in the barrel or endcap which meets the 
+preselection requirements, a reco::Photon object is created.  The preselection is based
+on a combination of the supercluster transverse energy, the $HadOverEM$ ratio, and
+isolation requirements.  At the time of this writing, only the requirement (10~GeV) on
+the transverse energy is active.
+
+The reco::Photon object is the reconstruction data format, and is designed to be as 
+space efficient as possible. This object carries information about the original 
+supercluster, the presence or absence of reconstructed conversions
+\footnote{A separate, specific data format (reco::Conversion) is 
+defined for conversions, which carries information about the reconstructed track(s), 
+fitted vertex, and associated clusters.  For more information about the conversion
+finding, please see~\cite{NancyConv}}, 
+and the presence of pixel hits (which could be an indication that the object is in 
+reality an electron).  The photon candidate is attributed an energy and a momentum,
+the latter of which is calculated using the primary vertex of the photon (at the time
+of this writing, the vertex from pixel triplets is used).  The energy assigned to the
+photon is the energy in a 5x5 array of crystals if the previously defined R9 (see 
+Eqn.~\ref{eqn:R9}) is greater than 0.93.  Otherwise, the energy is the same as the
+supercluster energy.
+
+The second part of the software infrastructure is the
+CVS package RecoEgamma/PhotonIdentification.  For every reco::Photon object that 
+is created, a corresponding reco::PhotonID object is created, and an association 
+made and stored in the Event.  The purpose of the ``helper'' object reco::PhotonID is to 
+provide additional information in order to allow users to select reconstructed photon 
+objects that satisfy at least the criteria set forth in this note.  The reco::PhotonID 
+object (stored in DataFormats/EgammaCandidates) contains information on the isolation of 
+the photon (calculated using the RecoEgamma/EgammaIsolationAlgos) as well as several
 flags concerning the position of the photon with respect to both the barrel-endcap junction and the 
-supermodule boundaries and fiducial locations in detector $\eta-\phi$.  Quality flags, defined for {\bf LooseEM}, {\bf LoosePhoton} and {\bf TightPhoton} are also set based on the criteria defined in the configuration file.
+supermodule boundaries and fiducial locations in detector $\eta-\phi$.  Quality flags, 
+defined for {\bf LooseEM}, {\bf LoosePhoton} and {\bf TightPhoton} are also set based 
+on the criteria defined in the configuration file.
 
 \subsection{Photon Isolation}
 Tools to compute various isolation variables for electrons and photons are available in the
-package RecoEgamma/EgammaIsolationAlgos.  These are the tools called by RecoEgamma/PhotonIdentification for the
-calculation of the isolation.
+package RecoEgamma/EgammaIsolationAlgos.  These are the tools called by RecoEgamma/PhotonIdentification 
+for the calculation of the isolation.
 
 For verion 2\_1\_0 of the CMSSW software this package has been extensively reworked, to produce 
-reco::IsoDeposit. These ``Isodeposits'' store the basic information about each of the objects isolated against (crystals in the ECAL, tracks, etc.) 
-and thus allow the the isolation to be recomputed with varying cuts on cone size, $E_T$ thresholds and similar variables,
- even if the original objects have been dropped.
-Compared to the previous implementation, this switch provides increased flexibility. Additionally, the improved
-isolation code is structurally parallel to the muon isolation code, easing the implementation of higher level analysis.
+reco::IsoDeposit. These ``Isodeposits'' store the basic information about each of the objects 
+isolated against (crystals in the ECAL, tracks, etc.) and thus allow the the isolation to be 
+recomputed with varying cuts on cone size, $E_T$ thresholds and similar variables, even if the 
+original objects have been dropped.  Compared to the previous implementation, this switch 
+provides increased flexibility. Additionally, the improved isolation code is structurally parallel 
+to the muon isolation code, easing the implementation of higher level analysis.
 The approach has been been tested and shown to work well for HCAL and track isolation.
-For the ECAL-isolation, physics performance has been shown to be good, but technical issues remain to be adressed. 
-In particular the large number of crystals contained in typical isolation cones leads to large disk-space requirements and long
-execution times. Several solutions are currently under study.
+For the ECAL-isolation, physics performance has been shown to be good, but technical issues 
+remain to be adressed.  In particular the large number of crystals contained in typical isolation 
+cones leads to large disk-space requirements and long execution times. Several solutions 
+are currently under study.
 
 \section{Photon Identification at High Energies}
 
