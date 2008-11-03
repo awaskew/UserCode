@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 selectDigi = cms.EDProducer("EcalDigiSelector",
     EcalEBDigiTag = cms.InputTag("ecalDigis","ebDigis"),
     barrelSuperClusterCollection = cms.string(''),
-    nclus_sel = cms.int32(1),
+    nclus_sel = cms.int32(2),
     EcalEEDigiTag = cms.InputTag("ecalDigis","eeDigis"),
     barrelSuperClusterProducer = cms.string('correctedHybridSuperClusters'),
     endcapSuperClusterProducer = cms.string('correctedMulti5x5SuperClustersWithPreshower'),
@@ -11,7 +11,8 @@ selectDigi = cms.EDProducer("EcalDigiSelector",
     selectedEcalEBDigiCollection = cms.string('selectedEcalEBDigiCollection'),
     EcalEBRecHitTag = cms.InputTag("ecalRecHit","EcalRecHitsEB"),
     EcalEERecHitTag = cms.InputTag("ecalRecHit","EcalRecHitsEE"),
-    cluster_pt_thresh = cms.double(45.0),
+    cluster_pt_thresh = cms.double(25.0),
+    single_cluster_thresh = cms.double(45.0),
     selectedEcalEEDigiCollection = cms.string('selectedEcalEEDigiCollection')
 )
 

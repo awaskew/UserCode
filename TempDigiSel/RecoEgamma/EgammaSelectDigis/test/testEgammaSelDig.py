@@ -1,5 +1,5 @@
 import FWCore.ParameterSet.Config as cms
-
+from Configuration.StandardSequences.FakeConditions_cff import *
 process = cms.Process("PhotonIDProc")
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 
@@ -10,6 +10,9 @@ process.load("Geometry.CaloEventSetup.CaloGeometry_cfi")
 process.load("Geometry.CMSCommonData.cmsIdealGeometryXML_cfi")
 
 process.load("Geometry.CaloEventSetup.CaloTopology_cfi")
+
+process.load("Geometry.EcalMapping.EcalMappingRecord_cfi")
+process.load("Geometry.EcalMapping.EcalMapping_cfi")
 
 process.load("SimCalorimetry.EcalTrigPrimProducers.ecalTriggerPrimitiveDigis_cff")
 
@@ -24,7 +27,7 @@ process.source = cms.Source("PoolSource",
 )
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(1000)
 )
 process.Out = cms.OutputModule("PoolOutputModule",
     outputCommands = cms.untracked.vstring('drop *', 
@@ -38,12 +41,15 @@ process.digiAna = cms.EDAnalyzer("EcalDigiSelectAnalyzer",
 
 process.p = cms.Path(process.ecalDigis*process.seldigis*process.digiAna)
 process.e = cms.EndPath(process.Out)
-process.PoolSource.fileNames = ['/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/081018D5-EC33-DD11-A623-000423D6CA42.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/5233E17D-EF33-DD11-8B13-000423D98DB4.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/6C3F68D8-EC33-DD11-A624-000423D98804.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/6E4050D4-EC33-DD11-85C8-000423D6B48C.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/70C3BD68-ED33-DD11-BBCD-001617E30D40.root', 
-    '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/783C8A02-ED33-DD11-A1DD-00161757BF42.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/8006D44B-EC33-DD11-B534-001617DBD230.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/84C08904-ED33-DD11-93B0-000423D9870C.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/941F9165-ED33-DD11-973E-001617C3B64C.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/96AEE6C5-F133-DD11-B794-000423D6CAF2.root', 
-    '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/AAD8494E-EB33-DD11-B34F-00161757BF42.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/C22848D7-EC33-DD11-8BF0-000423D98DB4.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/D63078D6-EC33-DD11-A9D7-000423D9939C.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/D881F5B8-EE33-DD11-9679-000423D9939C.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/DAF2BD43-EC33-DD11-B85A-000423DD2F34.root', 
-    '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/EA41DDD9-EB33-DD11-9520-001617DBD5AC.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/ECCE3FE3-EB33-DD11-80A9-000423D986A8.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/F20BA363-ED33-DD11-B6D8-001617DF785A.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/F2B9DA5F-ED33-DD11-B82D-001617DBD5AC.root', '/store/relval/2008/6/6/RelVal-RelValTTbar-1212531852-IDEAL_V1-2nd-02/0000/FC8A8764-ED33-DD11-90DB-001617DBD5B2.root']
+process.PoolSource.fileNames = ['/store/relval/CMSSW_2_1_10/RelValTTbar/GEN-SIM-DIGI-RAW-HLTDEBUG-RECO/IDEAL_V9_v1/0001/1E04FC31-F99A-DD11-94EE-0018F3D096DE.root',
+        '/store/relval/CMSSW_2_1_10/RelValTTbar/GEN-SIM-DIGI-RAW-HLTDEBUG-RECO/IDEAL_V9_v1/0001/30CF1A2C-F99A-DD11-9E3B-001A928116FC.root',
+        '/store/relval/CMSSW_2_1_10/RelValTTbar/GEN-SIM-DIGI-RAW-HLTDEBUG-RECO/IDEAL_V9_v1/0001/4826BC56-319B-DD11-9280-0017312B5F3F.root',
+        '/store/relval/CMSSW_2_1_10/RelValTTbar/GEN-SIM-DIGI-RAW-HLTDEBUG-RECO/IDEAL_V9_v1/0001/4C720416-F89A-DD11-B745-003048769FDF.root',
+        '/store/relval/CMSSW_2_1_10/RelValTTbar/GEN-SIM-DIGI-RAW-HLTDEBUG-RECO/IDEAL_V9_v1/0001/4E40F71D-009B-DD11-9350-001731AF684D.root',
+        '/store/relval/CMSSW_2_1_10/RelValTTbar/GEN-SIM-DIGI-RAW-HLTDEBUG-RECO/IDEAL_V9_v1/0001/54767785-FA9A-DD11-977E-001A92810AE2.root',
+        '/store/relval/CMSSW_2_1_10/RelValTTbar/GEN-SIM-DIGI-RAW-HLTDEBUG-RECO/IDEAL_V9_v1/0001/569F692D-F99A-DD11-B0B1-0018F3D095FA.root']
 process.ecalDigis.DoRegional = False
 process.ecalDigis.InputLabel = 'rawDataCollector'
-process.ecalPreshowerDigis.Label = 'rawDataCollector'
+process.ecalPreshowerDigis.sourceTag = 'rawDataCollector'
 
 

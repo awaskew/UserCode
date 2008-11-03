@@ -45,6 +45,7 @@ class EcalDigiSelector : public edm::EDProducer
   edm::InputTag EcalEERecHitTag_;
   
   double cluster_pt_thresh_;
+  double single_cluster_thresh_;
   int nclus_sel_;
 
 

@@ -20,6 +20,7 @@
 #include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
 #include <TMath.h>
 #include <iostream>
+#include <set>
 
 
 using namespace reco;
@@ -41,6 +42,8 @@ EcalDigiSelector::EcalDigiSelector(const edm::ParameterSet& ps)
   EcalEERecHitTag_ = ps.getParameter<edm::InputTag>("EcalEERecHitTag");
   
   cluster_pt_thresh_ = ps.getParameter<double>("cluster_pt_thresh");
+  single_cluster_thresh_ = ps.getParameter<double>("single_cluster_thresh");
+
   nclus_sel_ = ps.getParameter<int>("nclus_sel");
   produces<EBDigiCollection>(selectedEcalEBDigiCollection_);
   produces<EEDigiCollection>(selectedEcalEEDigiCollection_);
@@ -77,7 +80,7 @@ void EcalDigiSelector::produce(edm::Event& evt, const edm::EventSetup& es)
 
   reco::SuperClusterCollection saveBarrelSuperClusters;
   reco::SuperClusterCollection saveEndcapSuperClusters;
-
+  bool meet_single_thresh = false;
   //Loop over barrel superclusters, and apply threshold
   for (int loop=0;loop<int(BarrelSuperClusters.size());loop++){
     SuperCluster clus1 = BarrelSuperClusters[loop];
@@ -87,6 +90,9 @@ void EcalDigiSelector::produce(edm::Event& evt, const edm::EventSetup& es)
     float cluspt1 = energy1 * sin(theta1);
     if (cluspt1 > cluster_pt_thresh_){
       saveBarrelSuperClusters.push_back(clus1);
+      if (cluspt1 > single_cluster_thresh_)
+	meet_single_thresh = true;
+      
     }
   }
 
@@ -99,16 +105,18 @@ void EcalDigiSelector::produce(edm::Event& evt, const edm::EventSetup& es)
     float cluspt1 = energy1 * sin(theta1);
     if (cluspt1 > cluster_pt_thresh_){
       saveEndcapSuperClusters.push_back(clus1);
+      if (cluspt1 > single_cluster_thresh_)
+	meet_single_thresh = true;
     }
   }
   
   std::auto_ptr<EBDigiCollection> SEBDigiCol(new EBDigiCollection);
   std::auto_ptr<EEDigiCollection> SEEDigiCol(new EEDigiCollection);
   int TotClus = saveBarrelSuperClusters.size() + saveEndcapSuperClusters.size();
-  std::cout << "Barrel Clusters: " << saveBarrelSuperClusters.size();
-  std::cout << " Endcap Clusters: " << saveEndcapSuperClusters.size();
-  std::cout << " Total: " << TotClus << std::endl;
-  if (TotClus >= nclus_sel_){
+  //  std::cout << "Barrel Clusters: " << saveBarrelSuperClusters.size();
+  //  std::cout << " Endcap Clusters: " << saveEndcapSuperClusters.size();
+  //  std::cout << " Total: " << TotClus << std::endl;
+  if (TotClus >= nclus_sel_ || meet_single_thresh){
     EcalClusterLazyTools tooly(evt, es, EcalEBRecHitTag_, EcalEERecHitTag_);
     if (saveBarrelSuperClusters.size() > 0){
       
@@ -116,6 +124,7 @@ void EcalDigiSelector::produce(edm::Event& evt, const edm::EventSetup& es)
 //       edm::Handle<EcalRecHitCollection> ecalhitsCollH;
 //       evt.getByLabel(EcalEBRecHitTag_, ecalhitsCollH);
 //       const EcalRecHitCollection* rechitsCollection = ecalhitsCollH.product();
+//      std::set<DetId> saveTheseDetIds;
       
       //get barrel digi collection
       edm::Handle<EBDigiCollection> pdigis;
@@ -135,24 +144,32 @@ void EcalDigiSelector::produce(edm::Event& evt, const edm::EventSetup& es)
 	//Loop over the 3x3
 	for (int ik = 0;ik<int(detvec.size());++ik)
 	  saveTheseDetIds.push_back(detvec[ik]);
+	//saveTheseDetIds.insert(detvec[ik]);
       }
       for (int detloop=0; detloop < int(saveTheseDetIds.size());++detloop){
-	EBDetId detL = EBDetId(saveTheseDetIds[detloop]);
+      	EBDetId detL = EBDetId(saveTheseDetIds[detloop]);
+	//      int ebcounter=0;
 	for (EBDigiCollection::const_iterator blah = digis->begin();
 	     blah!=digis->end();blah++){
+	  
 	  if (detL == blah->id()){
 	    EBDataFrame myDigi = (*blah);
 	    SEBDigiCol->push_back(detL);
+	    //SEBDigiCol->push_back(detL, myDigi);
 	    EBDataFrame df( SEBDigiCol->back());
 	    for (int iq =0;iq<myDigi.size();++iq){
-	      df.setSample(iq, myDigi.sample(iq).raw());
-	      
-	    }
-	    break;
-	  }
+ 	      df.setSample(iq, myDigi.sample(iq).raw());
+ 	    }
+	    //ebcounter++;
+	  } 
 	}
-      }//loop over detids
-      std::cout << "size of new digi container contents: " << SEBDigiCol->size() << std::endl;
+	//if (ebcounter >= int(saveTheseDetIds.size())) break;
+      }//loop over dets
+    
+
+      //      std::cout << "size of new digi container contents: " << SEBDigiCol->size() << std::endl;
+
+
     }//If barrel superclusters need saving.
     
     
@@ -163,7 +180,8 @@ void EcalDigiSelector::produce(edm::Event& evt, const edm::EventSetup& es)
       const EEDigiCollection* digis=0;
       evt.getByLabel(EcalEEDigiTag_,pdigis);
       digis = pdigis.product(); // get a ptr to the product
-      std::vector<DetId> saveTheseDetIds;
+      //std::vector<DetId> saveTheseDetIds;
+      std::set<DetId> saveTheseDetIds;
       //pick out the digis for the 3x3 in each of the selected superclusters
       for (int loop = 0;loop < int(saveEndcapSuperClusters.size());loop++){
 	SuperCluster clus1 = saveEndcapSuperClusters[loop];
@@ -175,12 +193,18 @@ void EcalDigiSelector::produce(edm::Event& evt, const edm::EventSetup& es)
 	std::vector<DetId> detvec = tooly.matrixDetId(EDetty.first, -1, 1, -1, 1);
 	//Loop over the 3x3
 	for (int ik = 0;ik<int(detvec.size());++ik)
-	  saveTheseDetIds.push_back(detvec[ik]);
+	  //saveTheseDetIds.push_back(detvec[ik]);
+	  saveTheseDetIds.insert(detvec[ik]);
       }
-      for (int detloop=0; detloop < int(saveTheseDetIds.size());++detloop){
-	EEDetId detL = EEDetId(saveTheseDetIds[detloop]);
-	for (EEDigiCollection::const_iterator blah = digis->begin();
-	     blah!=digis->end();blah++){
+      //      for (int detloop=0; detloop < int(saveTheseDetIds.size());++detloop){
+      //	EEDetId detL = EEDetId(saveTheseDetIds[detloop]);
+      int eecounter=0;
+      for (EEDigiCollection::const_iterator blah = digis->begin();
+	   blah!=digis->end();blah++){
+	std::set<DetId>::const_iterator finder = saveTheseDetIds.find(blah->id());
+	if (finder!=saveTheseDetIds.end()){
+	  EEDetId detL = EEDetId(*finder);
+
 	  if (detL == blah->id()){
 	    EEDataFrame myDigi = (*blah);
 	    SEEDigiCol->push_back(detL);
@@ -188,18 +212,20 @@ void EcalDigiSelector::produce(edm::Event& evt, const edm::EventSetup& es)
 	    for (int iq =0;iq<myDigi.size();++iq){
 	      df.setSample(iq, myDigi.sample(iq).raw());	      
 	    }
-	    break;
+	    eecounter++;
+	    
 	  }
 	}
-      }//loop over detids
-      std::cout << "Current new digi container contents: " << SEEDigiCol->size() << std::endl;
+	if (eecounter >= int(saveTheseDetIds.size())) break;
+      }//loop over digis
+      //      std::cout << "Current new digi container contents: " << SEEDigiCol->size() << std::endl;
     }//If endcap superclusters need saving.
     
   }//If we're actually saving stuff
   
   //Okay, either my collections have been filled with the requisite Digis, or they haven't.
   
-  std::cout << "Saving: " << SEBDigiCol->size() << " barrel digis and " << SEEDigiCol->size() << " endcap digis." << std::endl;
+  //  std::cout << "Saving: " << SEBDigiCol->size() << " barrel digis and " << SEEDigiCol->size() << " endcap digis." << std::endl;
 
   //Empty collection, or full, still put in event.
   evt.put(SEBDigiCol, selectedEcalEBDigiCollection_);
