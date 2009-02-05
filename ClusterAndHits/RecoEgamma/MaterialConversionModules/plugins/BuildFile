@@ -1,0 +1,14 @@
+<use name=FWCore/Framework>
+<use name=FWCore/PluginManager>
+
+<use name=DataFormats/EgammaReco>
+<use name=DataFormats/EgammaCandidates>
+<use name=CondFormats/PhysicsToolsObjects>
+<use name=Geometry/CaloGeometry>
+<use name=RecoCaloTools/MetaCollections>
+<use name=RecoEgamma/EgammaPhotonAlgos>
+
+<library name=RecoEgammaMaterialConversionModulesPlugins file="*.cc">
+  <flags EDM_PLUGIN=1>
+</library>
+
