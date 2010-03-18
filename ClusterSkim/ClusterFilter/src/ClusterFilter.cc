@@ -34,7 +34,7 @@ bool ClusterFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iEvent.getByLabel(_SCTag,SCHandle);
   const reco::SuperClusterCollection hclus = *SCHandle;
   
-  for (reco::SuperClusterCollection::const_iterator *clus = hclus.begin();
+  for (reco::SuperClusterCollection::const_iterator clus = hclus.begin();
        clus!=hclus.end();++clus){
     if (clus->clustersSize()>=_nClusSel) return true;
     const std::vector< std::pair<DetId, float> > hitsel = clus->hitsAndFractions();

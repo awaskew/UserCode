@@ -8,15 +8,11 @@ process = cms.Process("GMSBSkimWgt")
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.threshold = 'INFO'
 
-process.MessageLogger.cerr.INFO = cms.untracked.PSet(
-    default          = cms.untracked.PSet( limit = cms.untracked.int32(0)  ),
 
-    )
 process.load('Configuration/StandardSequences/Services_cff')
 process.load('FWCore/MessageService/MessageLogger_cfi')
 process.load('Configuration/StandardSequences/GeometryExtended_cff')
-process.load('Configuration/StandardSequences/MagneticField_AutoFromDBCurrent_cf
-f')
+process.load('Configuration/StandardSequences/MagneticField_AutoFromDBCurrent_cff')
 process.load('Configuration/StandardSequences/RawToDigi_Data_cff')
 process.load('Configuration/StandardSequences/Reconstruction_cff')
 process.load('Configuration/StandardSequences/EndOfProcess_cff')
@@ -29,7 +25,8 @@ process.GlobalTag.globaltag = cms.string('GR09_R_34X_V4::All')
 # this defines the input files
 #from PhysicsTools.StarterKit.RecoInput_cfi import *
 process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring(
-'rfio:/castor/cern.ch/user/h/heyburn/PAT/225Kludged/Zee/Zee_Summer08_IDEAL_V11_redigi_v2_1.root'
+'/store/data/BeamCommissioning09/MinimumBias/RECO/Feb9ReReco_v2/0030/06D02670-8F18-DF11-93F9-002618943856.root','/store/data/BeamCommissioning09/MinimumBias/RECO/Feb9ReReco_v2/0027/FEF0D80F-6816-DF11-8CCB-00261894398A.root','/store/data/BeamCommissioning09/MinimumBias/RECO/Feb9ReReco_v2/0027/F26FEF19-8E16-DF11-8AD9-003048678B38.root'
+
 ))
 # this inputs the input files from the previous function
 #process.source = RecoInput()
@@ -39,10 +36,10 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 
 
-process.clusSkim = cms.EDFilter("GMSBSkimFilter",
+process.clusSkim = cms.EDFilter("ClusterFilter",
                                 SCTag = cms.InputTag("correctedHybridSuperClusters"),
-                                nHitSel = cms.int(40),
-                                nClusSel = cms.int(3),
+                                nHitSel = cms.int32(40),
+                                nClusSel = cms.int32(3),
                                 ESel = cms.double(100)
                                 )
                                 
